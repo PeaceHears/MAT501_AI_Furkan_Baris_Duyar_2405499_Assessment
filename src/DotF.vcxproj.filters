@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DotF.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Robot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Demon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DemonBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WallSprite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="R_Captain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="R_Wololo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="R_Constrobot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Portal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="R_Pulsar2280.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DemonBoss.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DotF.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Robot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Demon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DemonBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WallSprite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="R_Captain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="R_Wololo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="R_Constrobot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Portal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="R_Pulsar2280.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DemonBoss.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DotF.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="DotF.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\menu\bitmap1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Icons\Dotf.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Icons\Dotf_sm.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Menu\menu_title.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Menu\menu_star.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Bitmaps\sheep.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\bitmaps\bitmap1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Bitmaps\bulletdemon.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Menu\menu_robot.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Bitmaps\monster.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Bitmaps\wall.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Bitmaps\enemybase.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Bitmaps\bullet.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Bitmaps\demon.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Resources\Sounds\menu_click.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Resources\Sounds\menu_click_back.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Resources\Sounds\menu_select.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Resources\Sounds\robot_fire.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Resources\Sounds\gun_shot.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+  </ItemGroup>
+</Project>

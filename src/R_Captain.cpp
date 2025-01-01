@@ -1,0 +1,87 @@
+//-----------------------------------------------------------------
+// Robot Captain Object
+// C++ Source - R_Captain.cpp
+//-----------------------------------------------------------------
+
+//-----------------------------------------------------------------
+// Include Files
+//-----------------------------------------------------------------
+#include "R_Captain.h"
+
+//-----------------------------------------------------------------
+// R_Captain Constructor(s)/Destructor
+//-----------------------------------------------------------------
+
+R_Captain::R_Captain(Sprite * _sprite, Sprite * _menuSprite,POINT _mapPosition):Robot(_sprite, _menuSprite, _mapPosition)
+{
+	name = { "Captain" };
+	description = { "Leads the robots to battle by boosting their stats.\nAbility 1: Passive. Boosts armor and max health of the allies by 20%."};
+	robotType = R_CAPTAIN;
+	stats.armor = 5;
+	// Set up first ability
+	time_t now;
+	time(&now);
+
+	// Ability 1
+	// Passive Aura. Always active. Boost nearby robots' stats.
+	abilities[0].cooldown = -1;
+	abilities[0].duration = -1;
+	abilities[0].name = { "Bolster Courage" };
+	abilities[0].ready = false;
+	abilities[0].active = true;
+	abilities[0].usedTime = time(0);
+
+	// Ability 2
+	// Active. Boost self stats for a duration.
+	abilities[1].cooldown = 20;
+	abilities[1].duration = 8;
+	abilities[1].name = { "Unbreakable" };
+	abilities[1].ready = true;
+	abilities[1].active = false;
+	abilities[1].usedTime = now;
+
+	// Stats
+	CharacterStats pStats;
+	pStats.fireDelay = 7;
+	pStats.fireSpeed = 7;
+	pStats.health = pStats.maxHealth = 100;
+	pStats.speed = 7;
+	pStats.armor = 10;
+	pStats.damage = 200;
+	stats = baseStats = pStats;
+}
+
+R_Captain::~R_Captain()
+{
+}
+
+
+//-----------------------------------------------------------------
+// R_Captain General Methods
+//-----------------------------------------------------------------
+void R_Captain::UseAbility1() {
+	// passive
+}
+
+void R_Captain::UseAbility2() {
+	if (abilities[1].ready == false) return;
+	time_t now;
+	time(&now);
+	abilities[1].ready = false;
+	abilities[1].active = true;
+	abilities[1].usedTime = now;
+	Unbreakable(true);
+}
+
+void R_Captain::Unbreakable(bool active) {
+	if (active) {
+		PlaySound((LPCWSTR)IDW_CAPTAIN_2, hInstance, SND_ASYNC | SND_RESOURCE);
+		stats.armor = 1000;
+		time_t now;
+		AddStatusMessage("*unbreakable*", time(&now) + 5);
+	}
+	else {
+		stats.armor = baseStats.armor;
+		abilities[1].active = false;
+	}
+}
