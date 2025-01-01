@@ -39,13 +39,23 @@ Demon::~Demon()
 //-----------------------------------------------------------------
 // Demon General Methods
 //-----------------------------------------------------------------
-void Character::Update() {
-	if (path.empty()) return;
+void Character::Update()
+{
+	if (path.empty())
+	{
+		return;
+	}
+
 	Move();
 }
 
-void Demon::Situations(Map currentMap, vector<DemonBase*> demonBaseArray, GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance) {
-	if (demonType == D_EXPLODE) return;
+void Demon::Situations(Map currentMap, vector<DemonBase*> demonBaseArray, GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance)
+{
+	if (demonType == D_EXPLODE)
+	{
+		return;
+	}
+
 	/*seekTheRobots(demon, currentmap);
 
 	POINT demonBasePosition;
@@ -57,53 +67,68 @@ void Demon::Situations(Map currentMap, vector<DemonBase*> demonBaseArray, GameEn
 	*/
 
 	// no enemy is around
-	if (this->GetNearbyRobots().size() == 0) {
+	if (this->GetNearbyRobots().size() == 0)
+	{
 		// TODO; maybe use skill too?
 		this->SetTask(AT_IDLE);
 
-		if (this->IsReady()) {
-			if (this->GetFirstCreated()) {
+		if (this->IsReady())
+		{
+			if (this->GetFirstCreated())
+			{
 				this->SetFirstCreated(false);
 				this->SetPath(DemonRoam(this, this->GetBase()->GetMapPosition(), this->GetBase()->GetMapPosition(), currentMap));
 
 			}
-			else {
+			else
+			{
 				this->SetPath(DemonRoam(this, this->GetMapPosition(), this->GetBase()->GetMapPosition(), currentMap));
 			}
 		}
 
 	}
-	else {
-
+	else
+	{
 		int robot_amount_around_the_demon = this->GetNearbyRobots().size();
 		int demon_amount_in_the_base = this->GetBase()->GetCurrentDemons().size();
 		vector<Robot*> robots = reinterpret_cast<vector<Robot*> const&>(nearbyRobots);
 		time_t now;
 		
-		if (robot_amount_around_the_demon <= 2) { //TASK 2
+		if (robot_amount_around_the_demon <= 2) //TASK 2
+		{
 
-			if (rand() % 2) {
+			if (rand() % 2)
+			{
 				AddStatusMessage("\"Metal scum!\"", time(&now) + 2, RGB(200, 15, 15));
 			}
-			else {
+			else
+			{
 				AddStatusMessage("\"You die!\"", time(&now) + 2, RGB(200, 15, 15));
 			}
 			
 			for (size_t i = 0; i < robot_amount_around_the_demon; i++)
+			{
 				AttackByMaintainingTheDistance(2, this, currentMap, robots[i], game, bmDemonBullet, hInstance);
+			}
 		}
-		else if (robot_amount_around_the_demon > 2) { // TASK 3
+		else if (robot_amount_around_the_demon > 2) // TASK 3
+		{
 			AddStatusMessage("Help, maggots!", time(&now) + 2, RGB(200, 15, 15));
+
 			for (size_t i = 0; i < demon_amount_in_the_base; i++)
+			{
 				WarnTheBaseDemons(3, this->GetBase()->GetCurrentDemons()[i], currentMap, this, game, bmDemonBullet, hInstance);
+			}
 
-			if (demon_amount_in_the_base < 2 * robot_amount_around_the_demon) { // TASK 5
-
+			if (demon_amount_in_the_base < 2 * robot_amount_around_the_demon) // TASK 5
+			{
 				DemonBase* the_closest_base = FindTheClosestBase(this, this->GetBase(), demonBaseArray);
 				int demon_amount_in_the_closest_base = the_closest_base->GetCurrentDemons().size();
 
 				for (size_t i = 0; i < demon_amount_in_the_closest_base; i++)
+				{
 					WarnTheBaseDemons(5, the_closest_base->GetCurrentDemons()[i], currentMap, this, game, bmDemonBullet, hInstance);
+				}
 
 				/*
 				if (the_closest_base->GetCurrentDemons().size() > 2 * robot_amount_around_the_demon && demon_amount_in_the_base > 2) { // TASK 6
@@ -116,17 +141,16 @@ void Demon::Situations(Map currentMap, vector<DemonBase*> demonBaseArray, GameEn
 				}
 				*/
 			}
-
 		}
 
-		if (demon_amount_in_the_base >= 2 * robot_amount_around_the_demon) { //TASK 4
-
+		if (demon_amount_in_the_base >= 2 * robot_amount_around_the_demon) //TASK 4
+		{
 			for (size_t i = 0; i < robot_amount_around_the_demon; i++)
+			{
 				AttackByMaintainingTheDistance(4, this, currentMap, robots[i], game, bmDemonBullet, hInstance);
+			}
 		}
-
 	}
-
 }
 
 /* void Demon::seekTheRobots(Demon* demon, Map currentmap) {
@@ -193,8 +217,9 @@ void Demon::GoToTheClosestBase(int taskNumber, Demon* demon, DemonBase* the_clos
 
 }*/
 
-void Demon::WarnTheBaseDemons(int taskNumber, Demon* demon, Map currentMap, Demon* helplessDemon, GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance) {
-
+void Demon::WarnTheBaseDemons(int taskNumber, Demon* demon, Map currentMap, Demon* helplessDemon, 
+	GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance)
+{
 	POINT startingposition;
 	startingposition.x = demon->GetMapPosition().x;
 	startingposition.y = demon->GetMapPosition().y;
@@ -207,47 +232,53 @@ void Demon::WarnTheBaseDemons(int taskNumber, Demon* demon, Map currentMap, Demo
 	vector<Robot*> robots = reinterpret_cast<vector<Robot*> const&>(nearbyRobots);
 
 	for (size_t i = 0; i < robot_amount_around_the_demon; i++)
+	{
 		AttackByMaintainingTheDistance(taskNumber, demon, currentMap, robots[i], game, bmDemonBullet, hInstance);
-
+	}
 }
 
-void Demon::AttackByMaintainingTheDistance(int taskNumber, Demon* demon, Map currentMap, Robot* robot, GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE   hInstance) {
-
+void Demon::AttackByMaintainingTheDistance(int taskNumber, Demon* demon, Map currentMap, Robot* robot, 
+	GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance)
+{
 	int distance = EuclideanDistance(demon, robot, NULL);
 
-	if (distance > 4) {
+	if (distance > 4)
+	{
 		Chase(taskNumber, demon, robot, currentMap);
 	}
-	else if (distance < 4) {
+	else if (distance < 4)
+	{
 		Evade(taskNumber, demon, robot, currentMap);
 	}
 
-	if (distance <= 5) { //başka base'den gelenlere ve attack için distance'ı dengeli tutmaya yönelik
-
+	if (distance <= 5) //başka base'den gelenlere ve attack için distance'ı dengeli tutmaya yönelik
+	{
 		demon->SetTask(AT_ATTACK);
 
 		if (taskNumber == 2 || taskNumber == 3)
+		{
 			target = demon->GetNearbyRobots().front();
-		else if (taskNumber == 4) {
-
+		}
+		else if (taskNumber == 4)
+		{
 			Robot* the_closest_robot = FindTheClosestRobot(demon, demon->GetNearbyRobots());
 
 			target = the_closest_robot;
 		}
 
 		int roll = rand() % 2;
+
 		// attack
-		if (roll == 0) {
+		if (roll == 0)
+		{
 			demon->SetFireDirection(target);
 			Attack(demon, game, bmDemonBullet, hInstance);
 		}
 	}
-
-
 }
 
-int Demon::EuclideanDistance(Demon* demon, Robot* robot, DemonBase* demonBase) {
-
+int Demon::EuclideanDistance(Demon* demon, Robot* robot, DemonBase* demonBase)
+{
 	//HER KARAKTERÝN UPDATE FONKU ÝÇÝNDE DE ÇAÐRILICAK
 	POINT startingposition;
 	startingposition.x = demon->GetMapPosition().x;
@@ -255,11 +286,13 @@ int Demon::EuclideanDistance(Demon* demon, Robot* robot, DemonBase* demonBase) {
 
 	POINT targetposition;
 
-	if (robot != NULL) {
+	if (robot != NULL)
+	{
 		targetposition.x = robot->GetMapPosition().x;
 		targetposition.y = robot->GetMapPosition().y;
 	}
-	else if (demonBase != NULL) {
+	else if (demonBase != NULL)
+	{
 		targetposition.x = demonBase->GetMapPosition().x;
 		targetposition.y = demonBase->GetMapPosition().y;
 	}
@@ -269,11 +302,12 @@ int Demon::EuclideanDistance(Demon* demon, Robot* robot, DemonBase* demonBase) {
 	int distance = pow(x, 2) + pow(y, 2);
 
 	int EuclideanDistance = sqrt(distance);
+
 	return EuclideanDistance;
 }
 
-void Demon::Chase(int taskNumber, Demon* demon, Robot* robot, Map currentMap) {
-
+void Demon::Chase(int taskNumber, Demon* demon, Robot* robot, Map currentMap)
+{
 	POINT demonPosition;
 	demonPosition.x = demon->GetMapPosition().x;
 	demonPosition.y = demon->GetMapPosition().y;
@@ -284,76 +318,86 @@ void Demon::Chase(int taskNumber, Demon* demon, Robot* robot, Map currentMap) {
 
 	POINT targetPosition = { demon->GetMapPosition().x , demon->GetMapPosition().y };
 
-	if (demonPosition.x > robotPosition.x) {
-		if (targetPosition.x - 1 >= 0) {
-			if (currentMap[targetPosition.y][targetPosition.x - 1] == 0) {
+	if (demonPosition.x > robotPosition.x)
+	{
+		if (targetPosition.x - 1 >= 0)
+		{
+			if (currentMap[targetPosition.y][targetPosition.x - 1] == 0)
+			{
 				targetPosition.x = demon->GetMapPosition().x - 1;
-
 			}
 		}
 	}
-
-	else if (demonPosition.x < robotPosition.x) {
-		if (targetPosition.x + 1 < 32) {
-			if (currentMap[targetPosition.y][targetPosition.x + 1] == 0) {
+	else if (demonPosition.x < robotPosition.x)
+	{
+		if (targetPosition.x + 1 < 32)
+		{
+			if (currentMap[targetPosition.y][targetPosition.x + 1] == 0)
+			{
 				targetPosition.x = demon->GetMapPosition().x + 1;
-
 			}
 		}
 	}
 
-	if (demonPosition.y >= robotPosition.y) {
-		if (targetPosition.y - 1 >= 0) {
-			if (currentMap[targetPosition.y - 1][targetPosition.x] == 0) {
+	if (demonPosition.y >= robotPosition.y)
+	{
+		if (targetPosition.y - 1 >= 0)
+		{
+			if (currentMap[targetPosition.y - 1][targetPosition.x] == 0)
+			{
 				targetPosition.y = demon->GetMapPosition().y - 1;
-
 			}
 		}
 	}
-
-	else if (demonPosition.y < robotPosition.y) {
-		if (targetPosition.y + 1 < 24) {
-			if (currentMap[targetPosition.y + 1][targetPosition.x] == 0) {
+	else if (demonPosition.y < robotPosition.y)
+	{
+		if (targetPosition.y + 1 < 24)
+		{
+			if (currentMap[targetPosition.y + 1][targetPosition.x] == 0)
+			{
 				targetPosition.y = demon->GetMapPosition().y + 1;
 			}
 		}
 	}
 
-	if (demon->IsReady()) {
-
+	if (demon->IsReady())
+	{
 		BOOL outOFbound = RestrictForTheBaseBoundaries(demon, targetPosition, currentMap);
 
-		if (taskNumber != 5 && taskNumber != 6 && !outOFbound) {
-
+		if (taskNumber != 5 && taskNumber != 6 && !outOFbound)
+		{
 			stack<POINT> path = FindPathBFS(demon->GetMapPosition(), targetPosition, currentMap);
 
 			if (path.size() != 0)
+			{
 				demon->SetPath(path);
-			else {
+			}
+			else
+			{
 				demon->ClearPath();
 				demon->SetReady(true);
 			}
 
 		}
-		else if (taskNumber == 5 || taskNumber == 6) {
-
+		else if (taskNumber == 5 || taskNumber == 6)
+		{
 			stack<POINT> path = FindPathBFS(demon->GetMapPosition(), targetPosition, currentMap);
 
 			if (path.size() != 0)
+			{
 				demon->SetPath(path);
-			else {
+			}
+			else
+			{
 				demon->ClearPath();
 				demon->SetReady(true);
 			}
-
 		}
 	}
-
-
 }
 
-void Demon::Evade(int taskNumber, Demon* demon, Robot* robot, Map currentMap) {
-
+void Demon::Evade(int taskNumber, Demon* demon, Robot* robot, Map currentMap)
+{
 	POINT demonPosition;
 	demonPosition.x = demon->GetMapPosition().x;
 	demonPosition.y = demon->GetMapPosition().y;
@@ -364,64 +408,76 @@ void Demon::Evade(int taskNumber, Demon* demon, Robot* robot, Map currentMap) {
 
 	POINT targetPosition = { demon->GetMapPosition().x , demon->GetMapPosition().y };
 
-	if (demonPosition.x >= robotPosition.x) {
-		if (targetPosition.x + 1 < 32) {
-			if (currentMap[targetPosition.y][targetPosition.x + 1] == 0) {
+	if (demonPosition.x >= robotPosition.x)
+	{
+		if (targetPosition.x + 1 < 32)
+		{
+			if (currentMap[targetPosition.y][targetPosition.x + 1] == 0)
+			{
 				targetPosition.x = demon->GetMapPosition().x + 1;
-
 			}
 		}
 	}
-
-	else if (demonPosition.x < robotPosition.x) {
-		if (targetPosition.x - 1 >= 0) {
-			if (currentMap[targetPosition.y][targetPosition.x - 1] == 0) {
+	else if (demonPosition.x < robotPosition.x)
+	{
+		if (targetPosition.x - 1 >= 0)
+		{
+			if (currentMap[targetPosition.y][targetPosition.x - 1] == 0)
+			{
 				targetPosition.x = demon->GetMapPosition().x - 1;
-
 			}
 		}
 	}
 
-	if (demonPosition.y >= robotPosition.y) {
-		if (targetPosition.y + 1 < 24) {
-			if (currentMap[targetPosition.y + 1][targetPosition.x] == 0) {
+	if (demonPosition.y >= robotPosition.y)
+	{
+		if (targetPosition.y + 1 < 24)
+		{
+			if (currentMap[targetPosition.y + 1][targetPosition.x] == 0)
+			{
 				targetPosition.y = demon->GetMapPosition().y + 1;
-
 			}
 		}
 	}
-
-	else if (demonPosition.y < robotPosition.y) {
-		if (targetPosition.y - 1 >= 0) {
-			if (currentMap[targetPosition.y - 1][targetPosition.x] == 0) {
+	else if (demonPosition.y < robotPosition.y)
+	{
+		if (targetPosition.y - 1 >= 0)
+		{
+			if (currentMap[targetPosition.y - 1][targetPosition.x] == 0)
+			{
 				targetPosition.y = demon->GetMapPosition().y - 1;
 			}
 		}
 	}
 
-	if (demon->IsReady()) {
-
+	if (demon->IsReady())
+	{
 		BOOL outOFbound = RestrictForTheBaseBoundaries(demon, targetPosition, currentMap);
 
-		if (taskNumber != 5 && taskNumber != 6 && !outOFbound) {
-
+		if (taskNumber != 5 && taskNumber != 6 && !outOFbound)
+		{
 			stack<POINT> path = FindPathBFS(demon->GetMapPosition(), targetPosition, currentMap);
 
 			if (path.size() != 0)
+			{
 				demon->SetPath(path);
-			else {
+			}
+			else
+			{
 				demon->ClearPath();
 				demon->SetReady(true);
 			}
-
 		}
-		else if (taskNumber == 5 || taskNumber == 6) {
-
+		else if (taskNumber == 5 || taskNumber == 6)
+		{
 			stack<POINT> path = FindPathBFS(demon->GetMapPosition(), targetPosition, currentMap);
 
 			if (path.size() != 0)
+			{
 				demon->SetPath(path);
-			else {
+			}
+			else
+			{
 				demon->ClearPath();
 				demon->SetReady(true);
 			}
@@ -431,8 +487,8 @@ void Demon::Evade(int taskNumber, Demon* demon, Robot* robot, Map currentMap) {
 
 }
 
-Robot* Demon::FindTheClosestRobot(Demon* demon, vector<Character*> robots_around_the_demon) {
-
+Robot* Demon::FindTheClosestRobot(Demon* demon, vector<Character*> robots_around_the_demon)
+{
 	vector<int> arr_distance;
 
 	for (size_t i = 0; i < robots_around_the_demon.size(); i++)
@@ -446,30 +502,29 @@ Robot* Demon::FindTheClosestRobot(Demon* demon, vector<Character*> robots_around
 
 	for (size_t i = 0; i < arr_distance.size(); i++)
 	{
-
 		if (arr_distance[i] < min_distance) {
 			min_distance = arr_distance[i];
 			index_of_the_closest_robot = i;
 		}
-
 	}
 
 	return (Robot*)robots_around_the_demon[index_of_the_closest_robot];
 }
 
-DemonBase* Demon::FindTheClosestBase(Demon* demon, DemonBase* _pEnemyBase, vector<DemonBase*> demonBaseArray) {
-
+DemonBase* Demon::FindTheClosestBase(Demon* demon, DemonBase* _pEnemyBase, vector<DemonBase*> demonBaseArray)
+{
 	vector<int> arr_distance;
 	int index_of_own_base = 0;
 
 	for (size_t i = 0; i < demonBaseArray.size(); i++)
 	{
-		if (demonBaseArray[i] != demon->GetBase()) { // kendi base'i disindakilere bak.
-
+		if (demonBaseArray[i] != demon->GetBase()) // kendi base'i disindakilere bak.
+		{
 			int distance = EuclideanDistance(demon, NULL, (DemonBase*)demonBaseArray[i]);
 			arr_distance.push_back(distance);
 		}
-		else {
+		else
+		{
 			index_of_own_base = i;
 		}
 	}
@@ -483,19 +538,21 @@ DemonBase* Demon::FindTheClosestBase(Demon* demon, DemonBase* _pEnemyBase, vecto
 
 			min_distance = arr_distance[i];
 			index_of_the_closest_base = i;
-
 		}
 	}
 
-	if (index_of_the_closest_base < index_of_own_base)  // kendi base'imizi katmadık.
+	if (index_of_the_closest_base < index_of_own_base) // kendi base'imizi katmadık.
+	{
 		return demonBaseArray[index_of_the_closest_base];
-	else {
+	}
+	else
+	{
 		return demonBaseArray[index_of_the_closest_base + 1];
 	}
 }
 
-BOOL Demon::RestrictForTheBaseBoundaries(Demon* demon, POINT dp, Map currentMap) {
-
+BOOL Demon::RestrictForTheBaseBoundaries(Demon* demon, POINT dp, Map currentMap)
+{
 	POINT demonPosition = dp;
 
 	POINT demonBasePosition;
@@ -505,15 +562,19 @@ BOOL Demon::RestrictForTheBaseBoundaries(Demon* demon, POINT dp, Map currentMap)
 	int differenceBetweenX_Axis = abs(demonPosition.x - demonBasePosition.x);
 	int differenceBetweenY_Axis = abs(demonPosition.y - demonBasePosition.y);
 
-	if (differenceBetweenX_Axis > 3 || differenceBetweenY_Axis > 3) {
+	if (differenceBetweenX_Axis > 3 || differenceBetweenY_Axis > 3)
+	{
 		return true;
 	}
-	else return false;
-
+	else
+	{
+		return false;
+	}
 }
 
 // Breadth first path finding
-stack<POINT> Demon::FindPathBFS(POINT _src, POINT _dst, Map _currentMap) {
+stack<POINT> Demon::FindPathBFS(POINT _src, POINT _dst, Map _currentMap)
+{
 	int cols = 32;
 	int rows = 24;
 	Map map = _currentMap;
@@ -523,49 +584,81 @@ stack<POINT> Demon::FindPathBFS(POINT _src, POINT _dst, Map _currentMap) {
 
 	alt.push(new Coordinate2(_src.x, _src.y));
 
-	while (!alt.empty()) {
+	while (!alt.empty())
+	{
 		c = alt.front();
 		alt.pop();
 
-		if (map[c->y][c->x] != 0 && map[c->y][c->x] != 3 && map[c->y][c->x] != 4) continue;
+		if (map[c->y][c->x] != 0 && map[c->y][c->x] != 3 && map[c->y][c->x] != 4)
+		{
+			continue;
+		}
 
 		map[c->y][c->x] = 99; // mark as visited
 
-		if (CoordinateDistance(c, new Coordinate2(_dst.x, _dst.y)) <= 1) {
+		if (CoordinateDistance(c, new Coordinate2(_dst.x, _dst.y)) <= 1)
+		{
 			int i = 0;
-			while (c->prev != NULL) {
+
+			while (c->prev != NULL)
+			{
 				path.push(c->screenPos);
 				c = c->prev;
 				i++;
 			}
+
 			return path;
 		}
 
-		if (c->x + 1 < cols && map[c->y][c->x + 1] == 0) alt.push(new Coordinate2(c->x + 1, c->y, c->dist + 1, c));
-		if (c->x - 1 >= 0 && map[c->y][c->x - 1] == 0) alt.push(new Coordinate2(c->x - 1, c->y, c->dist + 1, c));
-		if (c->y + 1 < rows && map[c->y + 1][c->x] == 0) alt.push(new Coordinate2(c->x, c->y + 1, c->dist + 1, c));
-		if (c->y - 1 >= 0 && map[c->y - 1][c->x] == 0) alt.push(new Coordinate2(c->x, c->y - 1, c->dist + 1, c));
+		if (c->x + 1 < cols && map[c->y][c->x + 1] == 0)
+		{
+			alt.push(new Coordinate2(c->x + 1, c->y, c->dist + 1, c));
+		}
+
+		if (c->x - 1 >= 0 && map[c->y][c->x - 1] == 0)
+		{
+			alt.push(new Coordinate2(c->x - 1, c->y, c->dist + 1, c));
+		}
+
+		if (c->y + 1 < rows && map[c->y + 1][c->x] == 0)
+		{
+			alt.push(new Coordinate2(c->x, c->y + 1, c->dist + 1, c));
+		}
+
+		if (c->y - 1 >= 0 && map[c->y - 1][c->x] == 0)
+		{
+			alt.push(new Coordinate2(c->x, c->y - 1, c->dist + 1, c));
+		}
 	}
 
 	return path; // no path;
 };
 
 // Manhattan distance of Coordinate class objects
-int Demon::CoordinateDistance(Coordinate2 *c1, Coordinate2 *c2) {
+int Demon::CoordinateDistance(Coordinate2 *c1, Coordinate2 *c2)
+{
 	int dx, dy;
 
 	dx = abs(c1->x - c2->x);
 	dy = abs(c1->y - c2->y);
+
 	return dx + dy;
 }
 
 // Fire from a character
-void Demon::Attack(Demon* demon, GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE  hInstance) {
+void Demon::Attack(Demon* demon, GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE  hInstance)
+{
+	if (demon->GetCurFireDelay() < demon->GetFireDelay())
+	{
+		return;
+	}
 
-	if (demon->GetCurFireDelay() < demon->GetFireDelay()) return;
 	demon->SetCurFireDelay(0);
 
-	if (demon->GetFireDirection().x == 0 && demon->GetFireDirection().y == 0) return;
+	if (demon->GetFireDirection().x == 0 && demon->GetFireDirection().y == 0)
+	{
+		return;
+	}
 
 	Sprite *bullet;
 
@@ -579,21 +672,29 @@ void Demon::Attack(Demon* demon, GameEngine* game, Bitmap* bmDemonBullet, HINSTA
 	bullet->SetCharacter(demon);
 
 	// Get bullet out of the character first
-	while (bullet->TestCollision(demon->GetSprite())) {
+	while (bullet->TestCollision(demon->GetSprite()))
+	{
 		if (bullet->GetVelocity().x == 0 && bullet->GetVelocity().y == 0)
 		{
 			break;
 		}
+
 		bullet->SetPosition(bullet->GetPosition().left + demon->GetFireDirection().x, bullet->GetPosition().top + demon->GetFireDirection().y);
 	}
+
 	game->AddSprite(bullet);
 }
 
-stack<POINT> Demon::DemonRoam(Demon *_demon, POINT robotposition, POINT baselocation, Map currentmap) {
+stack<POINT> Demon::DemonRoam(Demon *_demon, POINT robotposition, POINT baselocation, Map currentmap)
+{
 	/*int robotx= robot.GetMapPosition().x;
 	int roboty = robot.GetMapPosition().y;*/
 	int range = 3;
-	if (demonType == D_RANDOM) range = 15;
+
+	if (demonType == D_RANDOM)
+	{
+		range = 15;
+	}
 
 	vector<int> arr_x;
 	vector<int> arr_y;
@@ -605,15 +706,18 @@ stack<POINT> Demon::DemonRoam(Demon *_demon, POINT robotposition, POINT baseloca
 		arr_x.push_back(i);
 		arr_y.push_back(i);
 	}
+
 	int isFound = 0;
 	int target_y;
 	int target_x;
 	POINT targetposition;
 	int border = 2;
-	if (!_demon->GetFirstCreated()) {
-		border = 1;
 
+	if (!_demon->GetFirstCreated())
+	{
+		border = 1;
 	}
+
 	while (isFound < border)
 	{
 		std::random_device rd1; // obtain a random number from hardware
@@ -625,23 +729,33 @@ stack<POINT> Demon::DemonRoam(Demon *_demon, POINT robotposition, POINT baseloca
 		std::mt19937 eng2(rd2()); // seed the generator
 		std::uniform_int_distribution<> distr2(0, arr_x.size() - 2);
 		target_y = distr2(eng2);
-		if (target_y == 0 && target_x == 0) continue;
+
+		if (target_y == 0 && target_x == 0)
+		{
+			continue;
+		}
+
 		target_y = arr_y[target_y] + baselocation.y;
 
-		if (target_x < 0 || target_y < 0 || target_x >= 32 || target_y >= 24) continue;
+		if (target_x < 0 || target_y < 0 || target_x >= 32 || target_y >= 24)
+		{
+			continue;
+		}
 
 		if (currentmap[target_y][target_x] == 0)
 		{
-			if (isFound == 0) {
+			if (isFound == 0)
+			{
 				targetposition.x = target_x;
 				targetposition.y = target_y;
 			}
-			else if (isFound == 1) {
+			else if (isFound == 1)
+			{
 				robotposition.x = target_x;
 				robotposition.y = target_y;
 			}
-			isFound++;
 
+			isFound++;
 		}
 	}
 
