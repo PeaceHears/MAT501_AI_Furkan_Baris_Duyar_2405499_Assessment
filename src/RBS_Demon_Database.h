@@ -1,9 +1,7 @@
 #pragma once
 
-class RBS_Database
+struct RBS_Demon_Database
 {
-private:
 	int nearbyRobotCount = 0;
-
+	int demonCountAtTheBase = 0;
 };
-
