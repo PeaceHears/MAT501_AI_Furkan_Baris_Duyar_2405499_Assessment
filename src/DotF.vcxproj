@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -158,6 +158,7 @@
     <ClInclude Include="DotF.h" />
     <ClInclude Include="GameEngine.h" />
     <ClInclude Include="Portal.h" />
+    <ClInclude Include="RBS_Database.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Robot.h" />
     <ClInclude Include="R_Captain.h" />
@@ -179,6 +180,7 @@
     <ClCompile Include="DotF.cpp" />
     <ClCompile Include="GameEngine.cpp" />
     <ClCompile Include="Portal.cpp" />
+    <ClCompile Include="RBS_Database.cpp" />
     <ClCompile Include="Robot.cpp" />
     <ClCompile Include="R_Captain.cpp" />
     <ClCompile Include="R_Constrobot.cpp" />
