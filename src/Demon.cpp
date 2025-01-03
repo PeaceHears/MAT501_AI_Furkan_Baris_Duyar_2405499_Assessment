@@ -9,6 +9,8 @@
 #include "Demon.h"
 #include "DemonBase.h"
 #include "RBS_Demon_Database.h"
+#include "AI_Globals.h"
+#include "RBS_Demon_Main.h"
 
 //-----------------------------------------------------------------
 // Demon Constructor(s)/Destructor
@@ -57,107 +59,22 @@ void Character::Update()
 	Move();
 }
 
-void Demon::Situations(const Map& currentMap, const vector<DemonBase*>& demonBaseArray, 
-	GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance)
+void Demon::Situations(const Map& currentMap, const vector<DemonBase*>& demonBases, 
+	GameEngine* gameEngine, Bitmap* bmDemonBullet, RBS_Demon_Main& rbsDemonMain)
 {
 	if (demonType == D_EXPLODE)
 	{
 		return;
 	}
 
-	rbs_Demon_Database->nearbyRobotCount = this->GetNearbyRobots().size();
-
-	/*seekTheRobots(demon, currentmap);
-
-	POINT demonBasePosition;
-	demonBasePosition.x = demon->GetBase()->GetMapPosition().x;
-	demonBasePosition.y = demon->GetBase()->GetMapPosition().y;
-
-	int robot_amount_in_the_base = demon->GetCurrentTargets().size();
-	int demon_amount_in_the_base = demon->GetBase()->GetCurrentDemons().size();
-	*/
-
-	// no enemy is around
-	if (this->GetNearbyRobots().size() == 0)
+	if (demonAITechnique == AI_TECHNIQUE::RULE_BASED_SYSTEM)
 	{
-		// TODO; maybe use skill too?
-		this->SetTask(AT_IDLE);
+		rbs_Demon_Database->nearbyRobotCount = this->GetNearbyRobots().size();
+		rbs_Demon_Database->demonCountAtTheBase = this->GetBase()->GetCurrentDemons().size();
+		rbs_Demon_Database->isReady = this->IsReady();
+		rbs_Demon_Database->isFirstCreated = this->GetFirstCreated();
 
-		if (this->IsReady())
-		{
-			if (this->GetFirstCreated())
-			{
-				this->SetFirstCreated(false);
-				this->SetPath(DemonRoam(this, this->GetBase()->GetMapPosition(), this->GetBase()->GetMapPosition(), currentMap));
-			}
-			else
-			{
-				this->SetPath(DemonRoam(this, this->GetMapPosition(), this->GetBase()->GetMapPosition(), currentMap));
-			}
-		}
-	}
-	else
-	{
-		int robot_amount_around_the_demon = this->GetNearbyRobots().size();
-		int demon_amount_in_the_base = this->GetBase()->GetCurrentDemons().size();
-		vector<Robot*> robots = reinterpret_cast<vector<Robot*> const&>(nearbyRobots);
-		time_t now;
-		
-		if (robot_amount_around_the_demon <= 2) //TASK 2
-		{
-			if (rand() % 2)
-			{
-				AddStatusMessage("\"Metal scum!\"", time(&now) + 2, RGB(200, 15, 15));
-			}
-			else
-			{
-				AddStatusMessage("\"You die!\"", time(&now) + 2, RGB(200, 15, 15));
-			}
-			
-			for (size_t i = 0; i < robot_amount_around_the_demon; i++)
-			{
-				AttackByMaintainingTheDistance(2, this, currentMap, robots[i], game, bmDemonBullet, hInstance);
-			}
-		}
-		else if (robot_amount_around_the_demon > 2) // TASK 3
-		{
-			AddStatusMessage("Help, maggots!", time(&now) + 2, RGB(200, 15, 15));
-
-			for (size_t i = 0; i < demon_amount_in_the_base; i++)
-			{
-				WarnTheBaseDemons(3, this->GetBase()->GetCurrentDemons()[i], currentMap, this, game, bmDemonBullet, hInstance);
-			}
-
-			if (demon_amount_in_the_base < 2 * robot_amount_around_the_demon) // TASK 5
-			{
-				DemonBase* the_closest_base = FindTheClosestBase(this, this->GetBase(), demonBaseArray);
-				int demon_amount_in_the_closest_base = the_closest_base->GetCurrentDemons().size();
-
-				for (size_t i = 0; i < demon_amount_in_the_closest_base; i++)
-				{
-					WarnTheBaseDemons(5, the_closest_base->GetCurrentDemons()[i], currentMap, this, game, bmDemonBullet, hInstance);
-				}
-
-				/*
-				if (the_closest_base->GetCurrentDemons().size() > 2 * robot_amount_around_the_demon && demon_amount_in_the_base > 2) { // TASK 6
-
-					for (size_t i = 0; i < demon_amount_in_the_base / 2; i++)
-					{
-						// move to closest base
-						GoToTheClosestBase(6, this->GetBase()->GetCurrentDemons()[i], the_closest_base, currentMap, game, bmDemonBullet, hInstance); //en yakin base'e yardima gider.
-					}
-				}
-				*/
-			}
-		}
-
-		if (demon_amount_in_the_base >= 2 * robot_amount_around_the_demon) //TASK 4
-		{
-			for (size_t i = 0; i < robot_amount_around_the_demon; i++)
-			{
-				AttackByMaintainingTheDistance(4, this, currentMap, robots[i], game, bmDemonBullet, hInstance);
-			}
-		}
+		rbsDemonMain.Run(*rbs_Demon_Database, currentMap, demonBases, *this, *gameEngine, *bmDemonBullet);
 	}
 }
 

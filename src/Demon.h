@@ -25,6 +25,7 @@ using namespace std;
 
 class RBS_Demon_Database;
 class DemonBase; // reference
+class RBS_Demon_Main;
 
 //-----------------------------------------------------------------
 // Custom Data Types
@@ -95,7 +96,7 @@ public:
 	void			AttackByMaintainingTheDistance(const int taskNumber, Demon* demon, const Map& currentMap, Robot* robot, 
 		GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance);
 	void			Situations(const Map& currentMap, const vector<DemonBase*>& demonBases, 
-		GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance);
+		GameEngine* gameEngine, Bitmap* bmDemonBullet, RBS_Demon_Main& rbsDemonMain);
 	//void			seekTheRobots(Demon* demon, Map currentmap);
 	void			WarnTheBaseDemons(const int taskNumber, Demon* demon, const Map& currentMap, Demon* helplessDemon, 
 		GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance);

@@ -149,6 +149,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AI_Globals.h" />
     <ClInclude Include="Bitmap.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Character.h" />

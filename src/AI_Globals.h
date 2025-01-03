@@ -1,0 +1,9 @@
+#pragma once
+
+enum class AI_TECHNIQUE
+{
+	RULE_BASED_SYSTEM,
+	BEHAVIOUR_TREE
+};
+
+AI_TECHNIQUE demonAITechnique = AI_TECHNIQUE::RULE_BASED_SYSTEM;
