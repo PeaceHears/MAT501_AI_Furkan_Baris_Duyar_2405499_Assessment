@@ -23,6 +23,7 @@ using namespace std;
 #define DEMONBASE_H
 #endif
 
+class RBS_Demon_Database;
 class DemonBase; // reference
 
 //-----------------------------------------------------------------
@@ -91,20 +92,23 @@ public:
 
 	// General Methods
 	int				EuclideanDistance(Demon* demon, Robot* robot, DemonBase* demonBase);
-	void			AttackByMaintainingTheDistance(int taskNumber, Demon* demon, Map currentMap, Robot* robot, GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance);
-	void			Situations(Map currentMap, vector<DemonBase*> demonBaseArray, GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance);
+	void			AttackByMaintainingTheDistance(const int taskNumber, Demon* demon, const Map& currentMap, Robot* robot, 
+		GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance);
+	void			Situations(const Map& currentMap, const vector<DemonBase*>& demonBases, 
+		GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance);
 	//void			seekTheRobots(Demon* demon, Map currentmap);
-	void			WarnTheBaseDemons(int taskNumber, Demon* demon, Map currentMap, Demon* helplessDemon, GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance);
-	void			Chase(int taskNumber, Demon* demon, Robot* robot, Map currentMap);
-	void			Evade(int taskNumber, Demon* demon, Robot* robot, Map currentMap);
+	void			WarnTheBaseDemons(const int taskNumber, Demon* demon, const Map& currentMap, Demon* helplessDemon, 
+		GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance);
+	void			Chase(int taskNumber, Demon* demon, Robot* robot, const Map& currentMap);
+	void			Evade(int taskNumber, Demon* demon, Robot* robot, const Map& currentMap);
 
-	Robot*			FindTheClosestRobot(Demon* demon, vector<Character*> robots_around_the_demon);
-	DemonBase*		FindTheClosestBase(Demon* demon, DemonBase* _pEnemyBase, vector<DemonBase*> demonBaseArray);
-	BOOL			RestrictForTheBaseBoundaries(Demon* demon, POINT dp, Map currentMap);
+	Robot*			FindTheClosestRobot(Demon* demon, const vector<Character*>& robots_around_the_demon);
+	DemonBase*		FindTheClosestBase(Demon* demon, DemonBase* _pEnemyBase, const vector<DemonBase*>& demonBases);
+	BOOL			RestrictForTheBaseBoundaries(Demon* demon, POINT dp, const Map& currentMap);
 	int				CoordinateDistance(Coordinate2* c1, Coordinate2* c2);
-	stack<POINT>	FindPathBFS(POINT _src, POINT _dst, Map _currentMap);
+	stack<POINT>	FindPathBFS(POINT _src, POINT _dst, const Map& _currentMap);
 	void			Attack(Demon* demon, GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance);
-	stack<POINT>	DemonRoam(Demon *_demon, POINT robotposition, POINT baselocation, Map currentmap);
+	stack<POINT>	DemonRoam(Demon *_demon, POINT robotposition, POINT baselocation, const Map& currentmap);
 
 	// Accessor Methods
 	int				GetBaseNumber() { return base_number; };
@@ -118,4 +122,6 @@ public:
 	DemonType		GetDemonType() { return demonType; };
 	void			SetDemonType(DemonType dt) { demonType = dt; };
 
+private:
+	RBS_Demon_Database* rbs_Demon_Database = nullptr;
 };

@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="AI">
+      <UniqueIdentifier>{ae659800-c560-40d5-b54d-a030d3f3ea65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AI\RuleBasedSystem">
+      <UniqueIdentifier>{2ac9fe4e-f2c1-4653-ad46-bf1fd2ae46c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -45,12 +51,6 @@
     <ClInclude Include="Robot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Demon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DemonBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="WallSprite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -71,6 +71,24 @@
     </ClInclude>
     <ClInclude Include="DemonBoss.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RBS_Demon_Database.h">
+      <Filter>AI\RuleBasedSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Demon.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="DemonBase.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="RBS_Demon_Rules.h">
+      <Filter>AI\RuleBasedSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="RBS_Demon_Actions.h">
+      <Filter>AI\RuleBasedSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="RBS_Demon_Main.h">
+      <Filter>AI\RuleBasedSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -98,12 +116,6 @@
     <ClCompile Include="Robot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Demon.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DemonBase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="WallSprite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -124,6 +136,24 @@
     </ClCompile>
     <ClCompile Include="DemonBoss.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Demon.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="DemonBase.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="RBS_Demon_Rules.cpp">
+      <Filter>AI\RuleBasedSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="RBS_Demon_Actions.cpp">
+      <Filter>AI\RuleBasedSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="RBS_Demon_Database.cpp">
+      <Filter>AI\RuleBasedSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="RBS_Demon_Main.cpp">
+      <Filter>AI\RuleBasedSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

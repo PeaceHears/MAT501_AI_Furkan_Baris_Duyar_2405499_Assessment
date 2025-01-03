@@ -8,6 +8,7 @@
 //-----------------------------------------------------------------
 #include "Demon.h"
 #include "DemonBase.h"
+#include "RBS_Demon_Database.h"
 
 //-----------------------------------------------------------------
 // Demon Constructor(s)/Destructor
@@ -29,10 +30,17 @@ Demon::Demon(Sprite* _sprite, POINT _mapPosition,DemonBase* base):Character(_spr
 	pStats.damage = 10;
 	stats = baseStats = pStats;
 	fireDirection = { stats.fireSpeed, 0 };
+
+	rbs_Demon_Database = new RBS_Demon_Database();
 }
 
 Demon::~Demon()
 {
+	if (rbs_Demon_Database)
+	{
+		delete rbs_Demon_Database;
+		rbs_Demon_Database = nullptr;
+	}
 }
 
 
@@ -49,12 +57,15 @@ void Character::Update()
 	Move();
 }
 
-void Demon::Situations(Map currentMap, vector<DemonBase*> demonBaseArray, GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance)
+void Demon::Situations(const Map& currentMap, const vector<DemonBase*>& demonBaseArray, 
+	GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance)
 {
 	if (demonType == D_EXPLODE)
 	{
 		return;
 	}
+
+	rbs_Demon_Database->nearbyRobotCount = this->GetNearbyRobots().size();
 
 	/*seekTheRobots(demon, currentmap);
 
@@ -78,14 +89,12 @@ void Demon::Situations(Map currentMap, vector<DemonBase*> demonBaseArray, GameEn
 			{
 				this->SetFirstCreated(false);
 				this->SetPath(DemonRoam(this, this->GetBase()->GetMapPosition(), this->GetBase()->GetMapPosition(), currentMap));
-
 			}
 			else
 			{
 				this->SetPath(DemonRoam(this, this->GetMapPosition(), this->GetBase()->GetMapPosition(), currentMap));
 			}
 		}
-
 	}
 	else
 	{
@@ -96,7 +105,6 @@ void Demon::Situations(Map currentMap, vector<DemonBase*> demonBaseArray, GameEn
 		
 		if (robot_amount_around_the_demon <= 2) //TASK 2
 		{
-
 			if (rand() % 2)
 			{
 				AddStatusMessage("\"Metal scum!\"", time(&now) + 2, RGB(200, 15, 15));
@@ -206,18 +214,23 @@ void Demon::Situations(Map currentMap, vector<DemonBase*> demonBaseArray, GameEn
    demon->SetCurrentTargets(robots_in_range);
 }
 */
-/*
-void Demon::GoToTheClosestBase(int taskNumber, Demon* demon, DemonBase* the_closest_base, Map currentMap, GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance) {
 
-	int robot_amount_around_the_demon = demon->GetNearbyRobots().size();
-	vector<Robot*> robots = reinterpret_cast<vector<Robot*> const&>(nearbyRobots);
+/*
+void Demon::GoToTheClosestBase(int taskNumber, Demon* demon, DemonBase* the_closest_base,
+	Map currentMap, GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance)
+{
+	const auto& nearbyRobots = demon->GetNearbyRobots();
+	int robot_amount_around_the_demon = nearbyRobots.size();
+	//vector<Robot*> robots = reinterpret_cast<vector<Robot*> const&>(nearbyRobots);
 
 	for (size_t i = 0; i < robot_amount_around_the_demon; i++)
-		AttackByMaintainingTheDistance(taskNumber, demon, currentMap, robots[i], game, bmDemonBullet, hInstance);
+	{
+		//AttackByMaintainingTheDistance(taskNumber, demon, currentMap, nearbyRobots[i], game, bmDemonBullet, hInstance);
+	}
+}
+*/
 
-}*/
-
-void Demon::WarnTheBaseDemons(int taskNumber, Demon* demon, Map currentMap, Demon* helplessDemon, 
+void Demon::WarnTheBaseDemons(const int taskNumber, Demon* demon, const Map& currentMap, Demon* helplessDemon,
 	GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance)
 {
 	POINT startingposition;
@@ -237,7 +250,7 @@ void Demon::WarnTheBaseDemons(int taskNumber, Demon* demon, Map currentMap, Demo
 	}
 }
 
-void Demon::AttackByMaintainingTheDistance(int taskNumber, Demon* demon, Map currentMap, Robot* robot, 
+void Demon::AttackByMaintainingTheDistance(const int taskNumber, Demon* demon, const Map& currentMap, Robot* robot, 
 	GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance)
 {
 	int distance = EuclideanDistance(demon, robot, NULL);
@@ -306,7 +319,7 @@ int Demon::EuclideanDistance(Demon* demon, Robot* robot, DemonBase* demonBase)
 	return EuclideanDistance;
 }
 
-void Demon::Chase(int taskNumber, Demon* demon, Robot* robot, Map currentMap)
+void Demon::Chase(const int taskNumber, Demon* demon, Robot* robot, const Map& currentMap)
 {
 	POINT demonPosition;
 	demonPosition.x = demon->GetMapPosition().x;
@@ -396,7 +409,7 @@ void Demon::Chase(int taskNumber, Demon* demon, Robot* robot, Map currentMap)
 	}
 }
 
-void Demon::Evade(int taskNumber, Demon* demon, Robot* robot, Map currentMap)
+void Demon::Evade(const int taskNumber, Demon* demon, Robot* robot, const Map& currentMap)
 {
 	POINT demonPosition;
 	demonPosition.x = demon->GetMapPosition().x;
@@ -487,7 +500,7 @@ void Demon::Evade(int taskNumber, Demon* demon, Robot* robot, Map currentMap)
 
 }
 
-Robot* Demon::FindTheClosestRobot(Demon* demon, vector<Character*> robots_around_the_demon)
+Robot* Demon::FindTheClosestRobot(Demon* demon, const vector<Character*>& robots_around_the_demon)
 {
 	vector<int> arr_distance;
 
@@ -511,7 +524,7 @@ Robot* Demon::FindTheClosestRobot(Demon* demon, vector<Character*> robots_around
 	return (Robot*)robots_around_the_demon[index_of_the_closest_robot];
 }
 
-DemonBase* Demon::FindTheClosestBase(Demon* demon, DemonBase* _pEnemyBase, vector<DemonBase*> demonBaseArray)
+DemonBase* Demon::FindTheClosestBase(Demon* demon, DemonBase* _pEnemyBase, const vector<DemonBase*>& demonBaseArray)
 {
 	vector<int> arr_distance;
 	int index_of_own_base = 0;
@@ -551,7 +564,7 @@ DemonBase* Demon::FindTheClosestBase(Demon* demon, DemonBase* _pEnemyBase, vecto
 	}
 }
 
-BOOL Demon::RestrictForTheBaseBoundaries(Demon* demon, POINT dp, Map currentMap)
+BOOL Demon::RestrictForTheBaseBoundaries(Demon* demon, POINT dp, const Map& currentMap)
 {
 	POINT demonPosition = dp;
 
@@ -573,7 +586,7 @@ BOOL Demon::RestrictForTheBaseBoundaries(Demon* demon, POINT dp, Map currentMap)
 }
 
 // Breadth first path finding
-stack<POINT> Demon::FindPathBFS(POINT _src, POINT _dst, Map _currentMap)
+stack<POINT> Demon::FindPathBFS(POINT _src, POINT _dst, const Map& _currentMap)
 {
 	int cols = 32;
 	int rows = 24;
@@ -685,7 +698,7 @@ void Demon::Attack(Demon* demon, GameEngine* game, Bitmap* bmDemonBullet, HINSTA
 	game->AddSprite(bullet);
 }
 
-stack<POINT> Demon::DemonRoam(Demon *_demon, POINT robotposition, POINT baselocation, Map currentmap)
+stack<POINT> Demon::DemonRoam(Demon *_demon, POINT robotposition, POINT baselocation, const Map& currentmap)
 {
 	/*int robotx= robot.GetMapPosition().x;
 	int roboty = robot.GetMapPosition().y;*/

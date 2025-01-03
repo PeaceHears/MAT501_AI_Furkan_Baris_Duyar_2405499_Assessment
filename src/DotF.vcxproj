@@ -158,7 +158,10 @@
     <ClInclude Include="DotF.h" />
     <ClInclude Include="GameEngine.h" />
     <ClInclude Include="Portal.h" />
-    <ClInclude Include="RBS_Database.h" />
+    <ClInclude Include="RBS_Demon_Actions.h" />
+    <ClInclude Include="RBS_Demon_Database.h" />
+    <ClInclude Include="RBS_Demon_Main.h" />
+    <ClInclude Include="RBS_Demon_Rules.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Robot.h" />
     <ClInclude Include="R_Captain.h" />
@@ -180,7 +183,10 @@
     <ClCompile Include="DotF.cpp" />
     <ClCompile Include="GameEngine.cpp" />
     <ClCompile Include="Portal.cpp" />
-    <ClCompile Include="RBS_Database.cpp" />
+    <ClCompile Include="RBS_Demon_Actions.cpp" />
+    <ClCompile Include="RBS_Demon_Database.cpp" />
+    <ClCompile Include="RBS_Demon_Main.cpp" />
+    <ClCompile Include="RBS_Demon_Rules.cpp" />
     <ClCompile Include="Robot.cpp" />
     <ClCompile Include="R_Captain.cpp" />
     <ClCompile Include="R_Constrobot.cpp" />
