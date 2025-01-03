@@ -90,6 +90,9 @@
     <ClInclude Include="RBS_Demon_Main.h">
       <Filter>AI\RuleBasedSystem</Filter>
     </ClInclude>
+    <ClInclude Include="RBS_Demon_Action_Parameters.h">
+      <Filter>AI\RuleBasedSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -153,6 +156,9 @@
       <Filter>AI\RuleBasedSystem</Filter>
     </ClCompile>
     <ClCompile Include="RBS_Demon_Main.cpp">
+      <Filter>AI\RuleBasedSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="RBS_Demon_Action_Parameters.cpp">
       <Filter>AI\RuleBasedSystem</Filter>
     </ClCompile>
   </ItemGroup>

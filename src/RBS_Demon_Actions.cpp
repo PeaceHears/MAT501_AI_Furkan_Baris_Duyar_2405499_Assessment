@@ -1,11 +1,11 @@
 #include "RBS_Demon_Actions.h"
 #include "Demon.h"
 #include "DemonBase.h"
+#include "RBS_Demon_Action_Parameters.h"
 
-RBS_Demon_Actions::RBS_Demon_Actions(const std::vector<std::vector<int>>& currentMap, const std::vector<DemonBase*>& demonBases,
-	GameEngine* gameEngine, Bitmap* bmDemonBullet, HINSTANCE hInstance)
+RBS_Demon_Actions::RBS_Demon_Actions()
 {
-	Create(currentMap, demonBases, gameEngine, bmDemonBullet, hInstance);
+	Create();
 }
 
 RBS_Demon_Actions::~RBS_Demon_Actions()
@@ -13,91 +13,97 @@ RBS_Demon_Actions::~RBS_Demon_Actions()
 	 
 }
 
-void RBS_Demon_Actions::Create(const std::vector<std::vector<int>>& currentMap, const std::vector<DemonBase*>& demonBases,
-	GameEngine* gameEngine, Bitmap* bmDemonBullet, HINSTANCE hInstance)
+void RBS_Demon_Actions::Create()
 {
-	const auto& action1 = [](Demon& demon) -> void
+	const auto& action1 = [](RBS_Demon_Action_Parameters& actionParameters) -> void
 	{
-		demon.SetTask(AT_IDLE);
+		actionParameters.demon->SetTask(AT_IDLE);
 	};
 
-	const auto& action2 = [&currentMap](Demon& demon) -> void
+	const auto& action2 = [](RBS_Demon_Action_Parameters& actionParameters) -> void
 	{
-		auto& demonBase = *demon.GetBase();
+		auto& demonBase = *actionParameters.demon->GetBase();
 
-		demon.SetFirstCreated(false);
-		demon.SetPath(demon.DemonRoam(&demon, demonBase.GetMapPosition(), demonBase.GetMapPosition(), currentMap));
+		actionParameters.demon->SetFirstCreated(false);
+		actionParameters.demon->SetPath(actionParameters.demon->DemonRoam(actionParameters.demon, demonBase.GetMapPosition(), demonBase.GetMapPosition(),
+			actionParameters.currentMap));
 	};
 
-	const auto& action3 = [&currentMap](Demon& demon) -> void
+	const auto& action3 = [](RBS_Demon_Action_Parameters& actionParameters) -> void
 	{
-		auto& demonBase = *demon.GetBase();
+		auto& demonBase = *actionParameters.demon->GetBase();
 
-		demon.SetPath(demon.DemonRoam(&demon, demon.GetMapPosition(), demonBase.GetMapPosition(), currentMap));
+		actionParameters.demon->SetPath(actionParameters.demon->DemonRoam(actionParameters.demon, actionParameters.demon->GetMapPosition(), 
+			demonBase.GetMapPosition(), actionParameters.currentMap));
 	};
 
-	const auto& action4 = [&currentMap, &gameEngine, &bmDemonBullet, &hInstance](Demon& demon) -> void
+	const auto& action4 = [](RBS_Demon_Action_Parameters& actionParameters) -> void
 	{
-		const auto& nearbyRobots = demon.GetNearbyRobots();
+		const auto& nearbyRobots = actionParameters.demon->GetNearbyRobots();
 		const int nearbyRobotCount = nearbyRobots.size();
-		const int demonCountAtTheBase = demon.GetBase()->GetCurrentDemons().size();
+		const int demonCountAtTheBase = actionParameters.demon->GetBase()->GetCurrentDemons().size();
 		std::vector<Robot*> robots = reinterpret_cast<std::vector<Robot*> const&>(nearbyRobots);
 
 		for (size_t i = 0; i < nearbyRobotCount; i++)
 		{
-			demon.AttackByMaintainingTheDistance(2, &demon, currentMap, robots[i], gameEngine, bmDemonBullet, hInstance);
+			actionParameters.demon->AttackByMaintainingTheDistance(2, actionParameters.demon, actionParameters.currentMap, robots[i],
+				actionParameters.gameEngine, actionParameters.bmDemonBullet, hInstance);
 		}
 	};
 
-	const auto& action5 = [](Demon& demon) -> void
+	const auto& action5 = [](RBS_Demon_Action_Parameters& actionParameters) -> void
 	{
 		time_t now;
 
-		demon.AddStatusMessage("\"Metal scum!\"", time(&now) + 2, RGB(200, 15, 15));
+		actionParameters.demon->AddStatusMessage("\"Metal scum!\"", time(&now) + 2, RGB(200, 15, 15));
 	};
 
-	const auto& action6 = [](Demon& demon) -> void
+	const auto& action6 = [](RBS_Demon_Action_Parameters& actionParameters) -> void
 	{
 		time_t now;
 
-		demon.AddStatusMessage("\"You die!\"", time(&now) + 2, RGB(200, 15, 15));
+		actionParameters.demon->AddStatusMessage("\"You die!\"", time(&now) + 2, RGB(200, 15, 15));
 	};
 
-	const auto& action7 = [&currentMap, &gameEngine, &bmDemonBullet, &hInstance](Demon& demon) -> void
+	const auto& action7 = [](RBS_Demon_Action_Parameters& actionParameters) -> void
 	{
 		time_t now;
-		const auto& demonsAtTheBase = demon.GetBase()->GetCurrentDemons();
+		const auto& demonsAtTheBase = actionParameters.demon->GetBase()->GetCurrentDemons();
 		const int demonCountAtTheBase = demonsAtTheBase.size();
 
-		demon.AddStatusMessage("Help, maggots!", time(&now) + 2, RGB(200, 15, 15));
+		actionParameters.demon->AddStatusMessage("Help, maggots!", time(&now) + 2, RGB(200, 15, 15));
 
 		for (size_t i = 0; i < demonCountAtTheBase; i++)
 		{
-			demon.WarnTheBaseDemons(3, demonsAtTheBase[i], currentMap, &demon, gameEngine, bmDemonBullet, hInstance);
+			actionParameters.demon->WarnTheBaseDemons(3, demonsAtTheBase[i], actionParameters.currentMap, actionParameters.demon,
+				actionParameters.gameEngine, actionParameters.bmDemonBullet, hInstance);
 		}
 	};
 
-	const auto& action8 = [&demonBases, &currentMap, &gameEngine, &bmDemonBullet, &hInstance](Demon& demon) -> void
+	const auto& action8 = [](RBS_Demon_Action_Parameters& actionParameters) -> void
 	{
-		auto& closestBase = *demon.FindTheClosestBase(&demon, demon.GetBase(), demonBases);
+		auto& closestBase = *actionParameters.demon->FindTheClosestBase(actionParameters.demon, actionParameters.demon->GetBase(), 
+			actionParameters.demonBases);
 		const auto& currentDemonsAtClosestBase = closestBase.GetCurrentDemons();
 		const int demonCountAtTheClosestBase = closestBase.GetCurrentDemons().size();
 
 		for (size_t i = 0; i < demonCountAtTheClosestBase; i++)
 		{
-			demon.WarnTheBaseDemons(5, currentDemonsAtClosestBase[i], currentMap, &demon, gameEngine, bmDemonBullet, hInstance);
+			actionParameters.demon->WarnTheBaseDemons(5, currentDemonsAtClosestBase[i], actionParameters.currentMap, 
+				actionParameters.demon, actionParameters.gameEngine, actionParameters.bmDemonBullet, hInstance);
 		}
 	};
 
-	const auto& action9 = [&currentMap, &gameEngine, &bmDemonBullet, &hInstance](Demon& demon) -> void
+	const auto& action9 = [](RBS_Demon_Action_Parameters& actionParameters) -> void
 	{
-		const auto& nearbyRobots = demon.GetNearbyRobots();
+		const auto& nearbyRobots = actionParameters.demon->GetNearbyRobots();
 		const int nearbyRobotCount = nearbyRobots.size();
 		std::vector<Robot*> robots = reinterpret_cast<std::vector<Robot*> const&>(nearbyRobots);
 
 		for (size_t i = 0; i < nearbyRobotCount; i++)
 		{
-			demon.AttackByMaintainingTheDistance(4, &demon, currentMap, robots[i], gameEngine, bmDemonBullet, hInstance);
+			actionParameters.demon->AttackByMaintainingTheDistance(4, actionParameters.demon, actionParameters.currentMap, robots[i],
+				actionParameters.gameEngine, actionParameters.bmDemonBullet, hInstance);
 		}
 	};
 

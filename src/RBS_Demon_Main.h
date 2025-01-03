@@ -5,24 +5,19 @@
 #include <Windows.h>
 
 class RBS_Demon_Database;
-class Demon;
-class DemonBase;
-class GameEngine;
-class Bitmap;
+class RBS_Demon_Action_Parameters;
 
-typedef std::pair<std::function<bool(const RBS_Demon_Database&)>, std::function<void(Demon& demon)>> ruleActionPair;
+typedef std::pair<std::function<bool(const RBS_Demon_Database&)>, std::function<void(RBS_Demon_Action_Parameters&)>> ruleActionPair;
 
 class RBS_Demon_Main
 {
 public:
-	RBS_Demon_Main(const std::vector<std::vector<int>>& currentMap, const std::vector<DemonBase*>& demonBases,
-		GameEngine* gameEngine, Bitmap* bmDemonBullet, HINSTANCE hInstance);
+	RBS_Demon_Main();
 	~RBS_Demon_Main();
 
 private:
 	std::vector<ruleActionPair> ruleActionList;
 
-	void CreateRuleActionList(const std::vector<std::vector<int>>& currentMap, const std::vector<DemonBase*>& demonBases,
-		GameEngine* gameEngine, Bitmap* bmDemonBullet, HINSTANCE hInstance);
+	void CreateRuleActionList();
 };
 

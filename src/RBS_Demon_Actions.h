@@ -4,7 +4,7 @@
 #include <functional>
 #include <Windows.h>
 
-class Demon;
+class RBS_Demon_Action_Parameters;
 class DemonBase;
 class GameEngine;
 class Bitmap;
@@ -12,15 +12,13 @@ class Bitmap;
 class RBS_Demon_Actions
 {
 public:
-	RBS_Demon_Actions(const std::vector<std::vector<int>>& currentMap, const std::vector<DemonBase*>& demonBases,
-		GameEngine* gameEngine, Bitmap* bmDemonBullet, HINSTANCE hInstance);
+	RBS_Demon_Actions();
 	~RBS_Demon_Actions();
 
-	const std::vector<std::function<void(Demon&)>>& GetActionList() const { return actionList; }
+	const std::vector<std::function<void(RBS_Demon_Action_Parameters&)>>& GetActionList() const { return actionList; }
 
 private:
-	std::vector<std::function<void(Demon&)>> actionList;
+	std::vector<std::function<void(RBS_Demon_Action_Parameters&)>> actionList;
 
-	void Create(const std::vector<std::vector<int>>& currentMap, const std::vector<DemonBase*>& demonBases,
-		GameEngine* gameEngine, Bitmap* bmDemonBullet, HINSTANCE hInstance);
+	void Create();
 };

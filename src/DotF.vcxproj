@@ -161,6 +161,7 @@
     <ClInclude Include="RBS_Demon_Actions.h" />
     <ClInclude Include="RBS_Demon_Database.h" />
     <ClInclude Include="RBS_Demon_Main.h" />
+    <ClInclude Include="RBS_Demon_Action_Parameters.h" />
     <ClInclude Include="RBS_Demon_Rules.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Robot.h" />
@@ -186,6 +187,7 @@
     <ClCompile Include="RBS_Demon_Actions.cpp" />
     <ClCompile Include="RBS_Demon_Database.cpp" />
     <ClCompile Include="RBS_Demon_Main.cpp" />
+    <ClCompile Include="RBS_Demon_Action_Parameters.cpp" />
     <ClCompile Include="RBS_Demon_Rules.cpp" />
     <ClCompile Include="Robot.cpp" />
     <ClCompile Include="R_Captain.cpp" />
