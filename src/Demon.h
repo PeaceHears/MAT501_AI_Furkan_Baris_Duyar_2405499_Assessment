@@ -125,10 +125,11 @@ public:
 	DemonType		GetDemonType() { return demonType; };
 	void			SetDemonType(DemonType dt) { demonType = dt; };
 
+	void SetRobotDistanceFactor(FL_Demon_Main& flDemonMain);
+
 private:
 	int robotDistanceFactor = 4;
 
 	RBS_Demon_Database* rbs_Demon_Database = nullptr;
 
-	void SetRobotDistanceFactor(FL_Demon_Main& flDemonMain);
 };
