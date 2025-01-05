@@ -57,6 +57,11 @@ void FL_Demon_Main::SetInputValue(const std::string& name, const int value)
 	engine->setInputValue(name, value);
 }
 
+void FL_Demon_Main::SetOutputValue(const std::string& name, int& value)
+{
+	value = engine->getOutputValue(name);
+}
+
 void FL_Demon_Main::ProcessEngine()
 {
 	engine->process();

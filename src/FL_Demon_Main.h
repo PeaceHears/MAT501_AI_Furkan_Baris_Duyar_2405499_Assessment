@@ -20,6 +20,7 @@ public:
 		Demon& demon, GameEngine& gameEngine, Bitmap& bmDemonBullet);
 
 	void SetInputValue(const std::string& name, const int value);
+	void SetOutputValue(const std::string& name, int& value);
 	void ProcessEngine();
 
 private:

@@ -114,6 +114,7 @@ void Demon::SetRobotDistanceFactor(FL_Demon_Main& flDemonMain)
 
 		flDemonMain.SetInputValue(AI_Globals::RobotName, randomRobotDistanceFactorInput);
 		flDemonMain.ProcessEngine();
+		flDemonMain.SetOutputValue(AI_Globals::RobotDistanceFactorName, robotDistanceFactor);
 	}
 }
 
