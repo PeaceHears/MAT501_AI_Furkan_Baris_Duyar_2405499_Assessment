@@ -23,7 +23,7 @@ void RBS_Demon_Rules::Create()
 		return false;
 	};
 
-	const auto& rule2 = [&rule1](const RBS_Demon_Database& database) -> bool
+	const auto& rule2 = [rule1](const RBS_Demon_Database& database) -> bool
 	{
 		if (rule1(database) && database.isReady && database.isFirstCreated)
 		{
@@ -33,7 +33,7 @@ void RBS_Demon_Rules::Create()
 		return false;
 	};
 
-	const auto& rule3 = [&rule1](const RBS_Demon_Database& database) -> bool
+	const auto& rule3 = [rule1](const RBS_Demon_Database& database) -> bool
 	{
 		if (rule1(database) && database.isReady && !database.isFirstCreated)
 		{
@@ -43,7 +43,7 @@ void RBS_Demon_Rules::Create()
 		return false;
 	};
 
-	const auto& rule4 = [&rule1](const RBS_Demon_Database& database) -> bool
+	const auto& rule4 = [rule1](const RBS_Demon_Database& database) -> bool
 	{
 		if (!rule1(database) && database.nearbyRobotCount <= 2)
 		{
@@ -53,7 +53,7 @@ void RBS_Demon_Rules::Create()
 		return false;
 	};
 
-	const auto& rule5 = [&rule1, &rule4](const RBS_Demon_Database& database) -> bool
+	const auto& rule5 = [rule1, &rule4](const RBS_Demon_Database& database) -> bool
 	{
 		if (!rule1(database) && rule4(database) && (rand() % 2))
 		{
@@ -63,7 +63,7 @@ void RBS_Demon_Rules::Create()
 		return false;
 	};
 
-	const auto& rule6 = [&rule1, &rule4, &rule5](const RBS_Demon_Database& database) -> bool
+	const auto& rule6 = [rule1, &rule4, &rule5](const RBS_Demon_Database& database) -> bool
 	{
 		if (!rule1(database) && rule4(database) && !(rand() % 2))
 		{
@@ -73,7 +73,7 @@ void RBS_Demon_Rules::Create()
 		return false;
 	};
 
-	const auto& rule7 = [&rule1, &rule4](const RBS_Demon_Database& database) -> bool
+	const auto& rule7 = [rule1, &rule4](const RBS_Demon_Database& database) -> bool
 	{
 		if (!rule1(database) && !rule4(database))
 		{
@@ -83,7 +83,7 @@ void RBS_Demon_Rules::Create()
 		return false;
 	};
 
-	const auto& rule8 = [&rule1, &rule7](const RBS_Demon_Database& database) -> bool
+	const auto& rule8 = [rule1, &rule7](const RBS_Demon_Database& database) -> bool
 	{
 		if (!rule1(database) && rule7(database) && database.demonCountAtTheBase < 2 * database.nearbyRobotCount)
 		{
@@ -93,7 +93,7 @@ void RBS_Demon_Rules::Create()
 		return false;
 	};
 
-	const auto& rule9 = [&rule1](const RBS_Demon_Database& database) -> bool
+	const auto& rule9 = [rule1](const RBS_Demon_Database& database) -> bool
 	{
 		if (!rule1(database) && database.demonCountAtTheBase >= 2 * database.nearbyRobotCount)
 		{
