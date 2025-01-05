@@ -28,19 +28,40 @@ void FL_Demon_Main::SetRules()
 	auto* robot = new InputVariable;
 	robot->setName(AI_Globals::RobotName);
 	robot->setRange(minRobotDistanceFactor, maxRobotDistanceFactor);
-	robot->addTerm(new Triangle("close", minRobotDistanceFactor, 2, middleRobotDistanceFactor));
-	robot->addTerm(new Triangle("away", middleRobotDistanceFactor, 7, maxRobotDistanceFactor));
+	robot->addTerm(new Triangle("close", minRobotDistanceFactor, 2, middleRobotDistanceFactor + 1));
+	robot->addTerm(new Triangle("away", middleRobotDistanceFactor - 1, 7, maxRobotDistanceFactor));
 	engine->addInputVariable(robot);
+
+	const int minDemonRoamRangeFactor = AI_Globals::MinDemonRoamRangeFactor;
+	const int maxDemonRoamRangeFactor = AI_Globals::MaxDemonRoamRangeFactor;
+	const int middleDemonRoamRangeFactor = AI_Globals::MaxDemonRoamRangeFactor / 2;
+
+	auto* demonRoamRange = new InputVariable;
+	demonRoamRange->setName(AI_Globals::DemonRoamRangeName);
+	demonRoamRange->setRange(minDemonRoamRangeFactor, maxDemonRoamRangeFactor);
+	demonRoamRange->addTerm(new Triangle("less", minDemonRoamRangeFactor, 2.1, middleDemonRoamRangeFactor + 1));
+	demonRoamRange->addTerm(new Triangle("much", middleDemonRoamRangeFactor - 1, 5.5, maxDemonRoamRangeFactor));
+	engine->addInputVariable(demonRoamRange);
 
 	auto* robotDistanceFactor = new OutputVariable;
 	robotDistanceFactor->setName(AI_Globals::RobotDistanceFactorName);
 	robotDistanceFactor->setRange(minRobotDistanceFactor, maxRobotDistanceFactor);
-	robotDistanceFactor->addTerm(new Triangle("low", minRobotDistanceFactor, 2.5, middleRobotDistanceFactor));
-	robotDistanceFactor->addTerm(new Triangle("high", middleRobotDistanceFactor, 6, maxRobotDistanceFactor));
+	robotDistanceFactor->addTerm(new Triangle("low", minRobotDistanceFactor, 2.5, middleRobotDistanceFactor + 1));
+	robotDistanceFactor->addTerm(new Triangle("high", middleRobotDistanceFactor - 1, 6, maxRobotDistanceFactor));
 	robotDistanceFactor->setDefuzzifier(new Centroid(100));
 	robotDistanceFactor->setAggregation(new Maximum);
 	robotDistanceFactor->setDefaultValue(fl::nan);
 	engine->addOutputVariable(robotDistanceFactor);
+
+	auto* demonRoamRangeFactor = new OutputVariable;
+	demonRoamRangeFactor->setName(AI_Globals::DemonRoamRangeFactorName);
+	demonRoamRangeFactor->setRange(minDemonRoamRangeFactor, maxDemonRoamRangeFactor);
+	demonRoamRangeFactor->addTerm(new Triangle("low", minDemonRoamRangeFactor, 2.5, middleDemonRoamRangeFactor + 1));
+	demonRoamRangeFactor->addTerm(new Triangle("high", middleDemonRoamRangeFactor - 1, 4.5, maxDemonRoamRangeFactor));
+	demonRoamRangeFactor->setDefuzzifier(new Centroid(100));
+	demonRoamRangeFactor->setAggregation(new Maximum);
+	demonRoamRangeFactor->setDefaultValue(fl::nan);
+	engine->addOutputVariable(demonRoamRangeFactor);
 
 	auto* ruleBlock = new RuleBlock;
 	ruleBlock->setName("ruleBlock");
@@ -48,7 +69,10 @@ void FL_Demon_Main::SetRules()
 	ruleBlock->setDisjunction(new Maximum);
 	ruleBlock->setImplication(new AlgebraicProduct);
 	ruleBlock->setActivation(new General);
+	ruleBlock->addRule(Rule::parse("if robot is close then robotDistanceFactor is low", engine));
 	ruleBlock->addRule(Rule::parse("if robot is away then robotDistanceFactor is high", engine));
+	ruleBlock->addRule(Rule::parse("if demonRoamRange is less then demonRoamRangeFactor is low", engine));
+	ruleBlock->addRule(Rule::parse("if demonRoamRange is much then demonRoamRangeFactor is high", engine));
 	engine->addRuleBlock(ruleBlock);
 }
 

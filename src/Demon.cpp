@@ -110,11 +110,29 @@ void Demon::SetRobotDistanceFactor(FL_Demon_Main& flDemonMain)
 
 	if (AI_Globals::DemonAITechnique == AI_Globals::AI_TECHNIQUE::FUZZY_LOGIC)
 	{
-		const int randomRobotDistanceFactorInput = rand() % AI_Globals::MaxRobotDistanceFactor + AI_Globals::MinRobotDistanceFactor;
+		const int minRandomLimit = AI_Globals::MinRobotDistanceFactor + 1;
+		const int maxRandomLimit = AI_Globals::MaxRobotDistanceFactor;
+		const int randomRobotDistanceFactorInput = rand() % (maxRandomLimit - minRandomLimit) + minRandomLimit;
 
 		flDemonMain.SetInputValue(AI_Globals::RobotName, randomRobotDistanceFactorInput);
 		flDemonMain.ProcessEngine();
 		flDemonMain.SetOutputValue(AI_Globals::RobotDistanceFactorName, robotDistanceFactor);
+	}
+}
+
+void Demon::SetRoamRangeFactor(FL_Demon_Main& flDemonMain)
+{
+	roamRangeFactor = 3;
+
+	if (AI_Globals::DemonAITechnique == AI_Globals::AI_TECHNIQUE::FUZZY_LOGIC)
+	{
+		const int minRandomLimit = AI_Globals::MinDemonRoamRangeFactor + 1;
+		const int maxRandomLimit = AI_Globals::MaxDemonRoamRangeFactor;
+		const int randomRoamRangeFactorInput = rand() % (maxRandomLimit - minRandomLimit) + minRandomLimit;
+
+		flDemonMain.SetInputValue(AI_Globals::DemonRoamRangeName, randomRoamRangeFactorInput);
+		flDemonMain.ProcessEngine();
+		flDemonMain.SetOutputValue(AI_Globals::DemonRoamRangeFactorName, roamRangeFactor);
 	}
 }
 
@@ -571,7 +589,7 @@ stack<POINT> Demon::Roam(Demon *_demon, POINT robotposition, POINT baselocation,
 {
 	/*int robotx= robot.GetMapPosition().x;
 	int roboty = robot.GetMapPosition().y;*/
-	int range = 3;
+	int range = roamRangeFactor;
 
 	if (demonType == D_RANDOM)
 	{

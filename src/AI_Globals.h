@@ -13,6 +13,12 @@ namespace AI_Globals
 	constexpr const char* RobotName = "robot";
 	constexpr const char* RobotDistanceFactorName = "robotDistanceFactor";
 
-	constexpr const int MinRobotDistanceFactor = 1;
-	constexpr const int MaxRobotDistanceFactor = 8;
+	constexpr const char* DemonRoamRangeName = "demonRoamRange";
+	constexpr const char* DemonRoamRangeFactorName = "demonRoamRangeFactor";
+
+	constexpr const int MinRobotDistanceFactor = 0;
+	constexpr const int MaxRobotDistanceFactor = 10;
+
+	constexpr const int MinDemonRoamRangeFactor = 3;
+	constexpr const int MaxDemonRoamRangeFactor = 8;
 }

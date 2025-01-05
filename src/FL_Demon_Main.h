@@ -25,7 +25,7 @@ public:
 
 private:
 	fl::Engine* engine = nullptr;
-
+	
 	void SetRules();
 };
 
