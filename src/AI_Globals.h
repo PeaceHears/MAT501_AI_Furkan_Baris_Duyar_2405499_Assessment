@@ -1,9 +1,18 @@
 #pragma once
 
-enum class AI_TECHNIQUE
+namespace AI_Globals
 {
-	RULE_BASED_SYSTEM,
-	BEHAVIOUR_TREE
-};
+	enum class AI_TECHNIQUE
+	{
+		RULE_BASED_SYSTEM,
+		FUZZY_LOGIC
+	};
 
-AI_TECHNIQUE demonAITechnique = AI_TECHNIQUE::RULE_BASED_SYSTEM;
+	extern AI_TECHNIQUE DemonAITechnique;
+
+	constexpr const char* RobotName = "robot";
+	constexpr const char* RobotDistanceFactorName = "robotDistanceFactor";
+
+	constexpr const int MinRobotDistanceFactor = 1;
+	constexpr const int MaxRobotDistanceFactor = 8;
+}

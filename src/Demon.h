@@ -26,6 +26,7 @@ using namespace std;
 class RBS_Demon_Database;
 class DemonBase; // reference
 class RBS_Demon_Main;
+class FL_Demon_Main;
 
 //-----------------------------------------------------------------
 // Custom Data Types
@@ -95,8 +96,9 @@ public:
 	int				EuclideanDistance(Demon* demon, Robot* robot, DemonBase* demonBase);
 	void			AttackByMaintainingTheDistance(const int taskNumber, Demon* demon, const Map& currentMap, Robot* robot, 
 		GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance);
-	void			Situations(const Map& currentMap, const vector<DemonBase*>& demonBases, 
-		GameEngine* gameEngine, Bitmap* bmDemonBullet, RBS_Demon_Main& rbsDemonMain);
+	void			Situations(const Map& currentMap, const vector<DemonBase*>& demonBases,
+		GameEngine* gameEngine, Bitmap* bmDemonBullet,
+		RBS_Demon_Main& rbsDemonMain, FL_Demon_Main& flDemonMain);
 	//void			seekTheRobots(Demon* demon, Map currentmap);
 	void			WarnTheBaseDemons(const int taskNumber, Demon* demon, const Map& currentMap, Demon* helplessDemon, 
 		GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance);
@@ -109,7 +111,7 @@ public:
 	int				CoordinateDistance(Coordinate2* c1, Coordinate2* c2);
 	stack<POINT>	FindPathBFS(POINT _src, POINT _dst, const Map& _currentMap);
 	void			Attack(Demon* demon, GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance);
-	stack<POINT>	DemonRoam(Demon *_demon, POINT robotposition, POINT baselocation, const Map& currentmap);
+	stack<POINT>	Roam(Demon *_demon, POINT robotposition, POINT baselocation, const Map& currentmap);
 
 	// Accessor Methods
 	int				GetBaseNumber() { return base_number; };
@@ -124,5 +126,9 @@ public:
 	void			SetDemonType(DemonType dt) { demonType = dt; };
 
 private:
+	int robotDistanceFactor = 4;
+
 	RBS_Demon_Database* rbs_Demon_Database = nullptr;
+
+	void SetRobotDistanceFactor(FL_Demon_Main& flDemonMain);
 };

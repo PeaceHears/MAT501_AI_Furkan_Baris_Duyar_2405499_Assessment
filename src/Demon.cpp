@@ -9,8 +9,9 @@
 #include "Demon.h"
 #include "DemonBase.h"
 #include "RBS_Demon_Database.h"
-#include "AI_Globals.h"
 #include "RBS_Demon_Main.h"
+#include "FL_Demon_Main.h"
+#include "AI_Globals.h"
 
 //-----------------------------------------------------------------
 // Demon Constructor(s)/Destructor
@@ -60,14 +61,15 @@ void Character::Update()
 }
 
 void Demon::Situations(const Map& currentMap, const vector<DemonBase*>& demonBases, 
-	GameEngine* gameEngine, Bitmap* bmDemonBullet, RBS_Demon_Main& rbsDemonMain)
+	GameEngine* gameEngine, Bitmap* bmDemonBullet, 
+	RBS_Demon_Main& rbsDemonMain, FL_Demon_Main& flDemonMain)
 {
 	if (demonType == D_EXPLODE)
 	{
 		return;
 	}
 
-	if (demonAITechnique == AI_TECHNIQUE::RULE_BASED_SYSTEM)
+	if (AI_Globals::DemonAITechnique == AI_Globals::AI_TECHNIQUE::RULE_BASED_SYSTEM)
 	{
 		rbs_Demon_Database->nearbyRobotCount = this->GetNearbyRobots().size();
 		rbs_Demon_Database->demonCountAtTheBase = this->GetBase()->GetCurrentDemons().size();
@@ -76,76 +78,11 @@ void Demon::Situations(const Map& currentMap, const vector<DemonBase*>& demonBas
 
 		rbsDemonMain.Run(*rbs_Demon_Database, currentMap, demonBases, *this, *gameEngine, *bmDemonBullet);
 	}
-}
-
-/* void Demon::seekTheRobots(Demon* demon, Map currentmap) {
-
-   POINT demonposition;
-   demonposition.x = demon->GetMapPosition().x;
-   demonposition.y = demon->GetMapPosition().y;
-   const int range = 2;
-
-   vector<int> arr_x;
-   vector<int> arr_y;
-   int i = 0;
-   int value = 0;
-   while (value < 2 * range + 1) {
-	   arr_y.push_back(value);
-	   arr_x.push_back(value);
-	   if (i > 0) {
-		   i++;
-		   arr_y.push_back(-value);
-		   arr_x.push_back(-value);
-
-	   }
-
-	   value++;
-   }
-
-
-   vector<Character*> robots_in_range; // Demon tipinde olacak
-
-								   // Range içindeki düþmanlarý tespit eder ve bunlarý ateþ edilecek düþman arrayine ekler.
-   for (size_t i = 0; i < sizeof(arr_x); i++)
-   {
-	   for (size_t j = 0; j < sizeof(arr_y); j++)
-	   {
-		   if (!(i == 0 && j == 0)) {
-
-			   if (demonposition.x + arr_x[i] < 32 && demonposition.x + arr_x[i] >= 0 && demonposition.y + arr_y[j] < 24 && demonposition.y + arr_y[j] >= 0)
-			   {
-				   if (currentmap[demonposition.y + arr_y[j]][demonposition.x + arr_x[i]] == 3) // enemy 3
-				   {
-					   // get instance of the robot at position
-					   //robots_in_range.push_back(GetPlayer(demonposition.y + arr_y[j], demonposition.x + arr_x[i]));
-					   break;
-				   }
-
-			   }
-
-		   }
-
-	   }
-   }
-
-   demon->SetCurrentTargets(robots_in_range);
-}
-*/
-
-/*
-void Demon::GoToTheClosestBase(int taskNumber, Demon* demon, DemonBase* the_closest_base,
-	Map currentMap, GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance)
-{
-	const auto& nearbyRobots = demon->GetNearbyRobots();
-	int robot_amount_around_the_demon = nearbyRobots.size();
-	//vector<Robot*> robots = reinterpret_cast<vector<Robot*> const&>(nearbyRobots);
-
-	for (size_t i = 0; i < robot_amount_around_the_demon; i++)
+	else if (AI_Globals::DemonAITechnique == AI_Globals::AI_TECHNIQUE::FUZZY_LOGIC)
 	{
-		//AttackByMaintainingTheDistance(taskNumber, demon, currentMap, nearbyRobots[i], game, bmDemonBullet, hInstance);
+		flDemonMain.Run(currentMap, demonBases, *this, *gameEngine, *bmDemonBullet);
 	}
 }
-*/
 
 void Demon::WarnTheBaseDemons(const int taskNumber, Demon* demon, const Map& currentMap, Demon* helplessDemon,
 	GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance)
@@ -167,21 +104,34 @@ void Demon::WarnTheBaseDemons(const int taskNumber, Demon* demon, const Map& cur
 	}
 }
 
+void Demon::SetRobotDistanceFactor(FL_Demon_Main& flDemonMain)
+{
+	robotDistanceFactor = 4;
+
+	if (AI_Globals::DemonAITechnique == AI_Globals::AI_TECHNIQUE::FUZZY_LOGIC)
+	{
+		const int randomRobotDistanceFactorInput = rand() % AI_Globals::MaxRobotDistanceFactor + AI_Globals::MinRobotDistanceFactor;
+
+		flDemonMain.SetInputValue(AI_Globals::RobotName, randomRobotDistanceFactorInput);
+		flDemonMain.ProcessEngine();
+	}
+}
+
 void Demon::AttackByMaintainingTheDistance(const int taskNumber, Demon* demon, const Map& currentMap, Robot* robot, 
 	GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance)
 {
-	int distance = EuclideanDistance(demon, robot, NULL);
+	const int distance = EuclideanDistance(demon, robot, NULL);
 
-	if (distance > 4)
+	if (distance > robotDistanceFactor)
 	{
 		Chase(taskNumber, demon, robot, currentMap);
 	}
-	else if (distance < 4)
+	else if (distance < robotDistanceFactor)
 	{
 		Evade(taskNumber, demon, robot, currentMap);
 	}
 
-	if (distance <= 5) //başka base'den gelenlere ve attack için distance'ı dengeli tutmaya yönelik
+	if (distance <= robotDistanceFactor + 1) //To balance the distance for attack and also for demons that come from other demon bases
 	{
 		demon->SetTask(AT_ATTACK);
 
@@ -209,7 +159,8 @@ void Demon::AttackByMaintainingTheDistance(const int taskNumber, Demon* demon, c
 
 int Demon::EuclideanDistance(Demon* demon, Robot* robot, DemonBase* demonBase)
 {
-	//HER KARAKTERÝN UPDATE FONKU ÝÇÝNDE DE ÇAÐRILICAK
+	//TODO: Call in Update func of every character
+
 	POINT startingposition;
 	startingposition.x = demon->GetMapPosition().x;
 	startingposition.y = demon->GetMapPosition().y;
@@ -615,7 +566,7 @@ void Demon::Attack(Demon* demon, GameEngine* game, Bitmap* bmDemonBullet, HINSTA
 	game->AddSprite(bullet);
 }
 
-stack<POINT> Demon::DemonRoam(Demon *_demon, POINT robotposition, POINT baselocation, const Map& currentmap)
+stack<POINT> Demon::Roam(Demon *_demon, POINT robotposition, POINT baselocation, const Map& currentmap)
 {
 	/*int robotx= robot.GetMapPosition().x;
 	int roboty = robot.GetMapPosition().y;*/

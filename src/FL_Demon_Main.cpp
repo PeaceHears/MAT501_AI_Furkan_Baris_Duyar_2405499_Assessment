@@ -1,0 +1,143 @@
+#include "FL_Demon_Main.h"
+#include "FlsImporter.h"
+#include <fl/Headers.h>
+#include "Demon.h"
+#include "DemonBase.h"
+#include "AI_Globals.h"
+
+using namespace fl;
+
+FL_Demon_Main::FL_Demon_Main()
+{
+	SetRules();
+}
+
+FL_Demon_Main::~FL_Demon_Main()
+{
+
+}
+
+void FL_Demon_Main::SetRules()
+{
+	engine = new Engine();
+
+	const int minRobotDistanceFactor = AI_Globals::MinRobotDistanceFactor;
+	const int maxRobotDistanceFactor = AI_Globals::MaxRobotDistanceFactor;
+	const int middleRobotDistanceFactor = AI_Globals::MaxRobotDistanceFactor / 2;
+
+	auto* robot = new InputVariable;
+	robot->setName(AI_Globals::RobotName);
+	robot->setRange(minRobotDistanceFactor, maxRobotDistanceFactor);
+	robot->addTerm(new Triangle("close", minRobotDistanceFactor, 2, middleRobotDistanceFactor));
+	robot->addTerm(new Triangle("away", middleRobotDistanceFactor, 7, maxRobotDistanceFactor));
+	engine->addInputVariable(robot);
+
+	auto* robotDistanceFactor = new OutputVariable;
+	robotDistanceFactor->setName(AI_Globals::RobotDistanceFactorName);
+	robotDistanceFactor->setRange(minRobotDistanceFactor, maxRobotDistanceFactor);
+	robotDistanceFactor->addTerm(new Triangle("low", minRobotDistanceFactor, 2.5, middleRobotDistanceFactor));
+	robotDistanceFactor->addTerm(new Triangle("high", middleRobotDistanceFactor, 6, maxRobotDistanceFactor));
+	robotDistanceFactor->setDefuzzifier(new Centroid(100));
+	robotDistanceFactor->setAggregation(new Maximum);
+	robotDistanceFactor->setDefaultValue(fl::nan);
+	engine->addOutputVariable(robotDistanceFactor);
+
+	auto* ruleBlock = new RuleBlock;
+	ruleBlock->setName("ruleBlock");
+	ruleBlock->setConjunction(new AlgebraicProduct);
+	ruleBlock->setDisjunction(new Maximum);
+	ruleBlock->setImplication(new AlgebraicProduct);
+	ruleBlock->setActivation(new General);
+	ruleBlock->addRule(Rule::parse("if robot is away then robotDistanceFactor is high", engine));
+	engine->addRuleBlock(ruleBlock);
+}
+
+void FL_Demon_Main::SetInputValue(const std::string& name, const int value)
+{
+	engine->setInputValue(name, value);
+}
+
+void FL_Demon_Main::ProcessEngine()
+{
+	engine->process();
+}
+
+void FL_Demon_Main::Run(const std::vector<std::vector<int>>& currentMap, const std::vector<DemonBase*>& demonBases,
+	Demon& demon, GameEngine& gameEngine, Bitmap& bmDemonBullet)
+{
+	if (demon.GetNearbyRobots().size() == 0)
+	{
+		demon.SetTask(AT_IDLE);
+
+		if (demon.IsReady())
+		{
+			const auto& demonBasePosition = demon.GetBase()->GetMapPosition();
+
+			if (demon.GetFirstCreated())
+			{
+				demon.SetFirstCreated(false);
+				demon.SetPath(demon.Roam(&demon, demonBasePosition, demonBasePosition, currentMap));
+			}
+			else
+			{
+				demon.SetPath(demon.Roam(&demon, demon.GetMapPosition(), demonBasePosition, currentMap));
+			}
+		}
+	}
+	else
+	{
+		int robot_amount_around_the_demon = demon.GetNearbyRobots().size();
+		int demon_amount_in_the_base = demon.GetBase()->GetCurrentDemons().size();
+		const auto& nearbyRobots = demon.GetNearbyRobots();
+		vector<Robot*> robots = reinterpret_cast<vector<Robot*> const&>(nearbyRobots);
+		time_t now;
+
+		if (robot_amount_around_the_demon <= 2) //TASK 2
+		{
+			if (rand() % 2)
+			{
+				demon.AddStatusMessage("\"Metal scum!\"", time(&now) + 2, RGB(200, 15, 15));
+			}
+			else
+			{
+				demon.AddStatusMessage("\"You die!\"", time(&now) + 2, RGB(200, 15, 15));
+			}
+
+			for (size_t i = 0; i < robot_amount_around_the_demon; i++)
+			{
+				demon.AttackByMaintainingTheDistance(2, &demon, currentMap, robots[i], &gameEngine, &bmDemonBullet, hInstance);
+			}
+		}
+		else if (robot_amount_around_the_demon > 2) // TASK 3
+		{
+			demon.AddStatusMessage("Help, maggots!", time(&now) + 2, RGB(200, 15, 15));
+
+			for (size_t i = 0; i < demon_amount_in_the_base; i++)
+			{
+				demon.WarnTheBaseDemons(3, demon.GetBase()->GetCurrentDemons()[i], currentMap, 
+					&demon, &gameEngine, &bmDemonBullet, hInstance);
+			}
+
+			if (demon_amount_in_the_base < 2 * robot_amount_around_the_demon) // TASK 5
+			{
+				DemonBase* closestBase = demon.FindTheClosestBase(&demon, demon.GetBase(), demonBases);
+				const auto& currentDemonsAtTheClosestBase = closestBase->GetCurrentDemons();
+				const int demonCountAtTheClosestBase = currentDemonsAtTheClosestBase.size();
+
+				for (size_t i = 0; i < demonCountAtTheClosestBase; i++)
+				{
+					demon.WarnTheBaseDemons(5, currentDemonsAtTheClosestBase[i], currentMap, 
+						&demon, &gameEngine, &bmDemonBullet, hInstance);
+				}
+			}
+		}
+
+		if (demon_amount_in_the_base >= 2 * robot_amount_around_the_demon) //TASK 4
+		{
+			for (size_t i = 0; i < robot_amount_around_the_demon; i++)
+			{
+				demon.AttackByMaintainingTheDistance(4, &demon, currentMap, robots[i], &gameEngine, &bmDemonBullet, hInstance);
+			}
+		}
+	}
+}

@@ -2,7 +2,6 @@
 
 #include <vector>
 #include <functional>
-#include <Windows.h>
 
 class RBS_Demon_Database;
 class RBS_Demon_Action_Parameters;

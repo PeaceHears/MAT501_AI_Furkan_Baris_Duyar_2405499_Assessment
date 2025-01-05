@@ -16,8 +16,17 @@
     <Filter Include="AI">
       <UniqueIdentifier>{ae659800-c560-40d5-b54d-a030d3f3ea65}</UniqueIdentifier>
     </Filter>
-    <Filter Include="AI\RuleBasedSystem">
+    <Filter Include="AI\RuleBasedSystems">
       <UniqueIdentifier>{2ac9fe4e-f2c1-4653-ad46-bf1fd2ae46c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AI\RuleBasedSystems\Demon">
+      <UniqueIdentifier>{75ca92c7-5b81-4307-8a3f-ecf6a1e2c8ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AI\FuzzyLogic">
+      <UniqueIdentifier>{91f9e4c8-907f-472b-b528-a11230fd52a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AI\FuzzyLogic\Demon">
+      <UniqueIdentifier>{4fbbca26-e51a-4bb4-bd44-2d4d4cd14db3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -72,29 +81,35 @@
     <ClInclude Include="DemonBoss.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RBS_Demon_Database.h">
-      <Filter>AI\RuleBasedSystem</Filter>
-    </ClInclude>
     <ClInclude Include="Demon.h">
       <Filter>AI</Filter>
     </ClInclude>
     <ClInclude Include="DemonBase.h">
       <Filter>AI</Filter>
     </ClInclude>
-    <ClInclude Include="RBS_Demon_Rules.h">
-      <Filter>AI\RuleBasedSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="RBS_Demon_Actions.h">
-      <Filter>AI\RuleBasedSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="RBS_Demon_Main.h">
-      <Filter>AI\RuleBasedSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="RBS_Demon_Action_Parameters.h">
-      <Filter>AI\RuleBasedSystem</Filter>
-    </ClInclude>
     <ClInclude Include="AI_Globals.h">
       <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="RBS_Demon_Action_Parameters.h">
+      <Filter>AI\RuleBasedSystems\Demon</Filter>
+    </ClInclude>
+    <ClInclude Include="RBS_Demon_Actions.h">
+      <Filter>AI\RuleBasedSystems\Demon</Filter>
+    </ClInclude>
+    <ClInclude Include="RBS_Demon_Database.h">
+      <Filter>AI\RuleBasedSystems\Demon</Filter>
+    </ClInclude>
+    <ClInclude Include="RBS_Demon_Main.h">
+      <Filter>AI\RuleBasedSystems\Demon</Filter>
+    </ClInclude>
+    <ClInclude Include="RBS_Demon_Rules.h">
+      <Filter>AI\RuleBasedSystems\Demon</Filter>
+    </ClInclude>
+    <ClInclude Include="FL_Demon_Main.h">
+      <Filter>AI\FuzzyLogic\Demon</Filter>
+    </ClInclude>
+    <ClInclude Include="FlsImporter.h">
+      <Filter>AI\FuzzyLogic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -149,20 +164,29 @@
     <ClCompile Include="DemonBase.cpp">
       <Filter>AI</Filter>
     </ClCompile>
-    <ClCompile Include="RBS_Demon_Rules.cpp">
-      <Filter>AI\RuleBasedSystem</Filter>
+    <ClCompile Include="RBS_Demon_Action_Parameters.cpp">
+      <Filter>AI\RuleBasedSystems\Demon</Filter>
     </ClCompile>
     <ClCompile Include="RBS_Demon_Actions.cpp">
-      <Filter>AI\RuleBasedSystem</Filter>
+      <Filter>AI\RuleBasedSystems\Demon</Filter>
     </ClCompile>
     <ClCompile Include="RBS_Demon_Database.cpp">
-      <Filter>AI\RuleBasedSystem</Filter>
+      <Filter>AI\RuleBasedSystems\Demon</Filter>
     </ClCompile>
     <ClCompile Include="RBS_Demon_Main.cpp">
-      <Filter>AI\RuleBasedSystem</Filter>
+      <Filter>AI\RuleBasedSystems\Demon</Filter>
     </ClCompile>
-    <ClCompile Include="RBS_Demon_Action_Parameters.cpp">
-      <Filter>AI\RuleBasedSystem</Filter>
+    <ClCompile Include="RBS_Demon_Rules.cpp">
+      <Filter>AI\RuleBasedSystems\Demon</Filter>
+    </ClCompile>
+    <ClCompile Include="FL_Demon_Main.cpp">
+      <Filter>AI\FuzzyLogic\Demon</Filter>
+    </ClCompile>
+    <ClCompile Include="FlsImporter.cpp">
+      <Filter>AI\FuzzyLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="AI_Globals.cpp">
+      <Filter>AI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

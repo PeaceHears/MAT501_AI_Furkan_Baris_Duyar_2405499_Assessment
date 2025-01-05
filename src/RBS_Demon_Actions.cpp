@@ -25,7 +25,7 @@ void RBS_Demon_Actions::Create()
 		auto& demonBase = *actionParameters.demon->GetBase();
 
 		actionParameters.demon->SetFirstCreated(false);
-		actionParameters.demon->SetPath(actionParameters.demon->DemonRoam(actionParameters.demon, demonBase.GetMapPosition(), demonBase.GetMapPosition(),
+		actionParameters.demon->SetPath(actionParameters.demon->Roam(actionParameters.demon, demonBase.GetMapPosition(), demonBase.GetMapPosition(),
 			actionParameters.currentMap));
 	};
 
@@ -33,7 +33,7 @@ void RBS_Demon_Actions::Create()
 	{
 		auto& demonBase = *actionParameters.demon->GetBase();
 
-		actionParameters.demon->SetPath(actionParameters.demon->DemonRoam(actionParameters.demon, actionParameters.demon->GetMapPosition(), 
+		actionParameters.demon->SetPath(actionParameters.demon->Roam(actionParameters.demon, actionParameters.demon->GetMapPosition(), 
 			demonBase.GetMapPosition(), actionParameters.currentMap));
 	};
 
