@@ -136,6 +136,22 @@ void Demon::SetRoamRangeFactor(FL_Demon_Main& flDemonMain)
 	}
 }
 
+void Demon::SetBaseBoundaryFactor(FL_Demon_Main& flDemonMain)
+{
+	baseBoundaryFactor = 3;
+
+	if (AI_Globals::DemonAITechnique == AI_Globals::AI_TECHNIQUE::FUZZY_LOGIC)
+	{
+		const int minRandomLimit = AI_Globals::MinBaseBoundaryFactor + 1;
+		const int maxRandomLimit = AI_Globals::MaxBaseBoundaryFactor;
+		const int randomBaseBoundaryFactorInput = rand() % (maxRandomLimit - minRandomLimit) + minRandomLimit;
+
+		flDemonMain.SetInputValue(AI_Globals::BaseBoundaryName, randomBaseBoundaryFactorInput);
+		flDemonMain.ProcessEngine();
+		flDemonMain.SetOutputValue(AI_Globals::BaseBoundaryFactorName, baseBoundaryFactor);
+	}
+}
+
 void Demon::AttackByMaintainingTheDistance(const int taskNumber, Demon* demon, const Map& currentMap, Robot* robot, 
 	GameEngine* game, Bitmap* bmDemonBullet, HINSTANCE hInstance)
 {
@@ -462,7 +478,7 @@ BOOL Demon::RestrictForTheBaseBoundaries(Demon* demon, POINT dp, const Map& curr
 	int differenceBetweenX_Axis = abs(demonPosition.x - demonBasePosition.x);
 	int differenceBetweenY_Axis = abs(demonPosition.y - demonBasePosition.y);
 
-	if (differenceBetweenX_Axis > 3 || differenceBetweenY_Axis > 3)
+	if (differenceBetweenX_Axis > baseBoundaryFactor || differenceBetweenY_Axis > baseBoundaryFactor)
 	{
 		return true;
 	}

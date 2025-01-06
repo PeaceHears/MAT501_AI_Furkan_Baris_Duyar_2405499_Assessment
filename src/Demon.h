@@ -127,10 +127,12 @@ public:
 
 	void SetRobotDistanceFactor(FL_Demon_Main& flDemonMain);
 	void SetRoamRangeFactor(FL_Demon_Main& flDemonMain);
+	void SetBaseBoundaryFactor(FL_Demon_Main& flDemonMain);
 
 private:
 	int robotDistanceFactor = 4;
 	int roamRangeFactor = 3;
+	int baseBoundaryFactor = 3;
 
 	RBS_Demon_Database* rbs_Demon_Database = nullptr;
 

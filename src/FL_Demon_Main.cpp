@@ -43,6 +43,17 @@ void FL_Demon_Main::SetRules()
 	demonRoamRange->addTerm(new Triangle("much", middleDemonRoamRangeFactor - 1, 5.5, maxDemonRoamRangeFactor));
 	engine->addInputVariable(demonRoamRange);
 
+	const int minBaseBoundaryFactor = AI_Globals::MinBaseBoundaryFactor;
+	const int maxBaseBoundaryFactor = AI_Globals::MaxBaseBoundaryFactor;
+	const int middleBaseBoundaryFactor = AI_Globals::MaxBaseBoundaryFactor / 2;
+
+	auto* baseBoundary = new InputVariable;
+	baseBoundary->setName(AI_Globals::BaseBoundaryName);
+	baseBoundary->setRange(minBaseBoundaryFactor, maxBaseBoundaryFactor);
+	baseBoundary->addTerm(new Triangle("less", minBaseBoundaryFactor, 4, middleBaseBoundaryFactor + 1));
+	baseBoundary->addTerm(new Triangle("much", middleBaseBoundaryFactor - 1, 12, maxBaseBoundaryFactor));
+	engine->addInputVariable(baseBoundary);
+
 	auto* robotDistanceFactor = new OutputVariable;
 	robotDistanceFactor->setName(AI_Globals::RobotDistanceFactorName);
 	robotDistanceFactor->setRange(minRobotDistanceFactor, maxRobotDistanceFactor);
@@ -63,6 +74,16 @@ void FL_Demon_Main::SetRules()
 	demonRoamRangeFactor->setDefaultValue(fl::nan);
 	engine->addOutputVariable(demonRoamRangeFactor);
 
+	auto* baseBoundaryFactor = new OutputVariable;
+	baseBoundaryFactor->setName(AI_Globals::BaseBoundaryFactorName);
+	baseBoundaryFactor->setRange(minBaseBoundaryFactor, maxBaseBoundaryFactor);
+	baseBoundaryFactor->addTerm(new Triangle("low", minBaseBoundaryFactor, 5, middleBaseBoundaryFactor + 1));
+	baseBoundaryFactor->addTerm(new Triangle("high", middleBaseBoundaryFactor - 1, 11, maxBaseBoundaryFactor));
+	baseBoundaryFactor->setDefuzzifier(new Centroid(100));
+	baseBoundaryFactor->setAggregation(new Maximum);
+	baseBoundaryFactor->setDefaultValue(fl::nan);
+	engine->addOutputVariable(baseBoundaryFactor);
+
 	auto* ruleBlock = new RuleBlock;
 	ruleBlock->setName("ruleBlock");
 	ruleBlock->setConjunction(new AlgebraicProduct);
@@ -73,6 +94,8 @@ void FL_Demon_Main::SetRules()
 	ruleBlock->addRule(Rule::parse("if robot is away then robotDistanceFactor is high", engine));
 	ruleBlock->addRule(Rule::parse("if demonRoamRange is less then demonRoamRangeFactor is low", engine));
 	ruleBlock->addRule(Rule::parse("if demonRoamRange is much then demonRoamRangeFactor is high", engine));
+	ruleBlock->addRule(Rule::parse("if baseBoundary is less then baseBoundaryFactor is low", engine));
+	ruleBlock->addRule(Rule::parse("if baseBoundary is much then baseBoundaryFactor is high", engine));
 	engine->addRuleBlock(ruleBlock);
 }
 
