@@ -20,4 +20,3 @@ public:
 	bool isReady = false;
 	bool isFirstCreated = false;
 };
-
