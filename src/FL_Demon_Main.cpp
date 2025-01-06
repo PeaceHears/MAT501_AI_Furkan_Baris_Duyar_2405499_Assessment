@@ -40,7 +40,7 @@ void FL_Demon_Main::SetRules()
 	demonRoamRange->setName(AI_Globals::DemonRoamRangeName);
 	demonRoamRange->setRange(minDemonRoamRangeFactor, maxDemonRoamRangeFactor);
 	demonRoamRange->addTerm(new Triangle("less", minDemonRoamRangeFactor, 2.1, middleDemonRoamRangeFactor + 1));
-	demonRoamRange->addTerm(new Triangle("much", middleDemonRoamRangeFactor - 1, 5.5, maxDemonRoamRangeFactor));
+	demonRoamRange->addTerm(new Triangle("much", middleDemonRoamRangeFactor - 1, 7.5, maxDemonRoamRangeFactor));
 	engine->addInputVariable(demonRoamRange);
 
 	const int minBaseBoundaryFactor = AI_Globals::MinBaseBoundaryFactor;

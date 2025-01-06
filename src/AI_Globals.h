@@ -22,7 +22,7 @@ namespace AI_Globals
 	constexpr const int MinRobotDistanceFactor = 0;
 	constexpr const int MaxRobotDistanceFactor = 10;
 
-	constexpr const int MinDemonRoamRangeFactor = 3;
+	constexpr const int MinDemonRoamRangeFactor = 1;
 	constexpr const int MaxDemonRoamRangeFactor = 8;
 
 	constexpr const int MinBaseBoundaryFactor = 2;
