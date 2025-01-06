@@ -129,6 +129,10 @@ public:
 	void SetRoamRangeFactor(FL_Demon_Main& flDemonMain);
 	void SetBaseBoundaryFactor(FL_Demon_Main& flDemonMain);
 
+	const int GetRobotDistanceFactor() const { return robotDistanceFactor; }
+	const int GetRoamRangeFactor() const { return roamRangeFactor; }
+	const int GetBaseBoundaryFactor() const { return baseBoundaryFactor; }
+
 private:
 	int robotDistanceFactor = 4;
 	int roamRangeFactor = 3;
