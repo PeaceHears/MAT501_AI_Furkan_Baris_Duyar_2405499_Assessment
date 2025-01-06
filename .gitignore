@@ -30,7 +30,6 @@ src/x64
 *.lai
 *.la
 *.a
-*.lib
 
 # Executables
 *.exe
