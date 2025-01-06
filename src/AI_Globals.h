@@ -26,5 +26,5 @@ namespace AI_Globals
 	constexpr const int MaxDemonRoamRangeFactor = 8;
 
 	constexpr const int MinBaseBoundaryFactor = 2;
-	constexpr const int MaxBaseBoundaryFactor = 15;
+	constexpr const int MaxBaseBoundaryFactor = 16;
 }
